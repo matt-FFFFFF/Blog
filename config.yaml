@@ -1,0 +1,38 @@
+BaseUrl: https://mattwhite.blog/
+LanguageCode: en-GB
+Title: Matt White's Blog
+paginate: 5
+DisqusShortname: mattwhiteblog
+author: Matt White
+enableGitInfo: true
+enableRobotsTXT: true
+theme: hugo-casper-theme
+Copyright: "All rights reserved - 2019"
+canonifyurls: true
+params:
+  description: "Welcome to my blog"
+  metadescription: >-
+          "Azure blog"
+  author: "Matt White"
+  authorlocation: "United Kingdom"
+  authorbio: "Cloud Solution Architect at Microsoft"
+  githubName: matt-FFFFFF
+  twitterName: matthewwhite
+  linkedinName: whitematthew
+  hjsStyle: default
+  social:
+    twitter: matthewwhite
+menu:
+  main:
+  - name: Home
+    weight: -100
+    identifier: blog
+    url: /
+  - name: About me
+    weight: -110
+    identifier: about
+    url: /about
+sitemap:
+  ChangeFreq: null
+  Filename: sitemap.xml
+  Priority: -1

@@ -4,3 +4,9 @@
 [submodule "output"]
 	path = output
 	url = https://github.com/matt-FFFFFF/matt-ffffff.github.io.git
+[submodule "themes/herring-cove"]
+	path = themes/herring-cove
+	url = https://github.com/spf13/herring-cove.git
+[submodule "themes/hugo-casper-theme"]
+	path = themes/hugo-casper-theme
+	url = https://github.com/vjeantet/hugo-theme-casper.git
