@@ -1,12 +1,9 @@
-[submodule "themes/jeffprod"]
-	path = themes/jeffprod
-	url = https://github.com/Tazeg/hugo-blog-jeffprod.git
 [submodule "output"]
 	path = output
 	url = https://github.com/matt-FFFFFF/matt-ffffff.github.io.git
 [submodule "themes/herring-cove"]
 	path = themes/herring-cove
 	url = https://github.com/spf13/herring-cove.git
-[submodule "themes/hugo-casper-theme"]
-	path = themes/hugo-casper-theme
-	url = https://github.com/vjeantet/hugo-theme-casper.git
+[submodule "themes/hugo-theme-den"]
+	path = themes/hugo-theme-den
+	url = https://github.com/shaform/hugo-theme-den.git

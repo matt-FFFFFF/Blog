@@ -1,38 +1,90 @@
-BaseUrl: https://mattwhite.blog/
-LanguageCode: en-GB
-Title: Matt White's Blog
-paginate: 5
-DisqusShortname: mattwhiteblog
-author: Matt White
-enableGitInfo: true
+baseURL: 'https://mattwhite.blog'
+title: Matt White's Blog
+theme: hugo-theme-den
+enableEmoji: true
 enableRobotsTXT: true
-theme: hugo-casper-theme
-Copyright: "All rights reserved - 2019"
-canonifyurls: true
-params:
-  description: "Welcome to my blog"
-  metadescription: >-
-          "Azure blog"
-  author: "Matt White"
-  authorlocation: "United Kingdom"
-  authorbio: "Cloud Solution Architect at Microsoft"
-  githubName: matt-FFFFFF
-  twitterName: matthewwhite
-  linkedinName: whitematthew
-  hjsStyle: default
-  social:
-    twitter: matthewwhite
-menu:
-  main:
-  - name: Home
-    weight: -100
-    identifier: blog
-    url: /
-  - name: About me
-    weight: -110
-    identifier: about
-    url: /about
+hasCJKLanguage: false
+preserveTaxonomyNames: true
+rssLimit: 20
+paginate: 20
+paginatePath: page
+PygmentsCodeFences: true
+PygmentsUseClasses: true
+disqusShortname: mattwhiteblog
+googleAnalytics: ''
+defaultContentLanguage: en
+defaultContentLanguageInSubdir: false
+permalinks:
+  posts: '/:year/:month/:slug/'
+  categories: '/category/:slug/'
+  tags: '/tag/:slug/'
+  pages: '/:slug/'
+author:
+  name: Matt White
 sitemap:
-  ChangeFreq: null
-  Filename: sitemap.xml
-  Priority: -1
+  changefreq: monthly
+  priority: 0.5
+  filename: sitemap.xml
+params:
+  since: '2019'
+  rssFullContent: true
+  keywords:
+    - Hugo
+    - theme
+    - den
+  description: >-
+    My Azure-related blog.
+  logoTitle: Home
+  #siteLogoImage: images/globe.svg
+  #headerImage: images/background.jpg
+  showAuthorCard: true
+  showMenuLanguages: false
+  autoLoadComments: false
+  dateFormatToUse: '2006-01-02'
+  google_verification: ''
+  customCSS: []
+  customJS: []
+taxonomies:
+  category: categories
+  tag: tags
+  series: series
+  keyword: keywords
+related:
+  threshold: 50
+  includeNewer: true
+  toLower: false
+  indices:
+    - name: categories
+      weight: 200
+    - name: keywords
+      weight: 150
+    - name: tags
+      weight: 100
+    - name: series
+      weight: 75
+languages:
+  en:
+    languageCode: en
+    languageName: English
+    #contentDir: content/
+    weight: 1
+    menu:
+      main:
+        - name: About Me
+          weight: 10
+          identifier: aboutme
+          url: /about
+      social:
+        - name: GitHub
+          weight: 10
+          identifier: github
+          url: 'https://github.com/matt-FFFFFF/'
+        - name: 'Twitter'
+          weight: 20
+          identifier: twitter
+          url: https://twitter.com/matthewwhite
+#      links:
+#        - name: About Me
+#          weight: 10
+#          identifier: about_me
+#          url: /about
