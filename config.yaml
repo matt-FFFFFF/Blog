@@ -1,4 +1,4 @@
-baseURL: 'https://mattwhite.blog'
+baseURL: 'https://www.mattwhite.blog'
 title: Matt White's Blog
 theme: hugo-theme-den
 enableEmoji: true
