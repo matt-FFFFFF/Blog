@@ -60,6 +60,7 @@ stages:
     pool:
       vmImage: 'windows-latest'
     steps:
+    - checkout: none
     - task: DownloadPipelineArtifact@2
       inputs:
         artifactName: website
@@ -78,6 +79,7 @@ stages:
     pool:
       vmImage: 'windows-latest'
     steps:
+    - checkout: none
     - task: DownloadPipelineArtifact@2
       inputs:
         artifactName: website
