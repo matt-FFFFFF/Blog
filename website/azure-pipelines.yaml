@@ -1,0 +1,53 @@
+# Build and deploy static website
+
+trigger:
+- master
+- azure-pipelines-dev
+
+variables:
+  skipComponentGovernanceDetection: true
+  westEuropeStorageAccount: mattwhiteblogwesteurope
+  northEuropeStorageAccount: mattwhiteblognortheurope
+  azureSubscription: mattwhiteazuresub
+  sasTokenTimeoutInMinutes: 30
+
+stages:
+- stage: Build
+  displayName: Build website using Hugo
+  jobs:
+  - job: containerbuild
+    displayName: Build website using Docker container
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: 
+
+- stage: deploy
+  displayName: Deploy website to Azure Storage
+  dependsOn: Build
+  jobs:
+  - job: westeuropecopy
+    pool:
+      vmImage: 'windows-latest'
+    steps:
+    - task: AzureFileCopy@3
+      inputs:
+        sourcePath: $(Build.Repository.LocalPath)
+        azureSubscription: $(azureSubscription)
+        destination: azureBlob
+        storage: $(westEuropeStorageAccount)
+        containerName: '$web'
+        sasTokenTimeOutInMinutes: 30 # Optional
+
+  - job: northeuropecopy
+    pool:
+      vmImage: 'windows-latest'
+    steps:
+    - task: AzureFileCopy@3
+      inputs:
+        sourcePath: $(Build.Repository.LocalPath)
+        azureSubscription: $(azureSubscription)
+        destination: azureBlob
+        storage: $(northEuropeStorageAccount)
+        containerName: '$web'
+        sasTokenTimeOutInMinutes: 30 # Optional
