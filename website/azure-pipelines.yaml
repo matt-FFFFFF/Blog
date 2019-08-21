@@ -34,7 +34,7 @@ stages:
 - stage: deploy
   displayName: Deploy website to Azure Storage
   dependsOn: Build
-  condition: ${{ $false }}
+  condition: ${{ False }}
   jobs:
   - job: westeuropecopy
     pool:
