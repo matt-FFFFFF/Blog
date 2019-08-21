@@ -54,7 +54,7 @@ stages:
 - stage: deploy
   displayName: Deploy website to Azure Storage
   dependsOn: Build
-  condition: ${{ False }}
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
   - job: westeuropecopy
     pool:
