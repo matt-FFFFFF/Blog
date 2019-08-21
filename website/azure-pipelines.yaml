@@ -14,17 +14,27 @@ variables:
 stages:
 - stage: Build
   displayName: Build website using Hugo
+  variables:
+    dockerVersion: 19.03.1
   jobs:
   - job: containerbuild
     displayName: Build website using Docker container
     pool:
       vmImage: 'ubuntu-latest'
     steps:
-    - task: 
+    - task: DockerInstaller@0
+      inputs:
+        dockerVersion: $(dockerVersion)
+        releaseType: stable
+    - task: Docker@2
+      inputs:
+        command: login
+        containerRegistry: dockerhub
 
 - stage: deploy
   displayName: Deploy website to Azure Storage
   dependsOn: Build
+  condition: ${{ $false }}
   jobs:
   - job: westeuropecopy
     pool:
@@ -37,7 +47,7 @@ stages:
         destination: azureBlob
         storage: $(westEuropeStorageAccount)
         containerName: '$web'
-        sasTokenTimeOutInMinutes: 30 # Optional
+        sasTokenTimeOutInMinutes: 30
 
   - job: northeuropecopy
     pool:
@@ -50,4 +60,4 @@ stages:
         destination: azureBlob
         storage: $(northEuropeStorageAccount)
         containerName: '$web'
-        sasTokenTimeOutInMinutes: 30 # Optional
+        sasTokenTimeOutInMinutes: 30
