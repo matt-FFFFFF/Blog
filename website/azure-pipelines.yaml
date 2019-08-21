@@ -30,6 +30,21 @@ stages:
       inputs:
         command: login
         containerRegistry: dockerhub
+    - script: |
+        export HUGO_VERSION=`cat HUGO_VERSION`
+        docker pull klakegg/hugo:$HUGO_VERSION-ext
+      displayName: Docker pull
+      workingDirectory: $(Build.Repository.LocalPath)/website
+    - script: |
+        export HUGO_VERSION=`cat HUGO_VERSION`
+        export UID=`id -u`
+        docker run --rm -it -u $UID:$UID -v $DIR:/src -v $DIR/build:/target klakegg/hugo:$HUGO_VERSION-ext
+      displayName: Docker run (build site)
+      workingDirectory: $(Build.Repository.LocalPath)/website
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: $(Build.Repository.LocalPath)/website
+        artifact: website
 
 - stage: deploy
   displayName: Deploy website to Azure Storage
