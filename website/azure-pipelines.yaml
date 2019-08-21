@@ -60,9 +60,14 @@ stages:
     pool:
       vmImage: 'windows-latest'
     steps:
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        artifactName: website
+        buildType: current
+        targetPath: $(Pipeline.Workspace)/website
     - task: AzureFileCopy@3
       inputs:
-        sourcePath: $(Build.Repository.LocalPath)
+        sourcePath: $(Pipeline.Workspace)/website
         azureSubscription: $(azureSubscription)
         destination: azureBlob
         storage: $(westEuropeStorageAccount)
@@ -73,9 +78,14 @@ stages:
     pool:
       vmImage: 'windows-latest'
     steps:
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        artifactName: website
+        buildType: current
+        targetPath: $(Pipeline.Workspace)/website
     - task: AzureFileCopy@3
       inputs:
-        sourcePath: $(Build.Repository.LocalPath)
+        sourcePath: $(Pipeline.Workspace)/website
         azureSubscription: $(azureSubscription)
         destination: azureBlob
         storage: $(northEuropeStorageAccount)
