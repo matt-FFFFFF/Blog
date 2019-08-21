@@ -37,7 +37,6 @@ stages:
       workingDirectory: $(Build.Repository.LocalPath)/website
     - script: |
         export HUGO_VERSION=`cat HUGO_VERSION`
-        export UID=`id -u`
         docker run --rm -it -u $UID:$UID -v .:/src -v ./build:/target klakegg/hugo:$HUGO_VERSION-ext
       displayName: Docker run (build site)
       workingDirectory: $(Build.Repository.LocalPath)/website
