@@ -32,7 +32,7 @@ stages:
         targetType: filePath
         filePath: issuecert.ps1
         failOnStderr: true
-        workingDirectory: $(Build.Repository.LocalPath)/certbot
+        workingDirectory: $(System.DefaultWorkingDirectory)/certbot
       env:
         POSHACME_HOME: $(Agent.TempDirectory)/Posh-ACME
         AZURE_TOKEN: $(azureToken)
