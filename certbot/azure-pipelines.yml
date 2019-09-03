@@ -6,6 +6,9 @@ schedules:
   - cron: "0 0 * * *"
     displayName: Daily certificate issuue or renew
     always: true
+    branches:
+      include:
+        - master
 
 variables:
   skipComponentGovernanceDetection: true
