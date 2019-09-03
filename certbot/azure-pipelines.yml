@@ -33,7 +33,7 @@ stages:
       displayName: Posh-ACME
       inputs:
         targetType: filePath
-        filePath: issuecert.ps1
+        filePath: certbot/issuecert.ps1
         failOnStderr: true
         workingDirectory: $(System.DefaultWorkingDirectory)/certbot
       env:
