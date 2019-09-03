@@ -9,7 +9,7 @@ New-PACertificate $domain `
             -Contact 'matt.white@microsoft.com' `
             -DnsPlugin Azure `
             -PluginArgs @{
-                AZSubscriptionId=$((Get-AzContext).Subscription);
+                AZSubscriptionId=$($Env:AZURE_SUBSCRIPTION_ID);
                 AZAccessToken=$($Env:AZURE_TOKEN)
             }
                     

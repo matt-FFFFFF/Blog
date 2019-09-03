@@ -14,6 +14,7 @@ variables:
   skipComponentGovernanceDetection: true
   azureSubscription: mattwhiteazuresub
   letsEncryptEnvironment: LE_STAGE
+  azureSubscriptionId: ***REMOVED***
 
 stages:
 - stage: Certificate
@@ -50,3 +51,4 @@ stages:
         POSHACME_HOME: $(Agent.TempDirectory)/Posh-ACME
         AZURE_TOKEN: $(azureToken)
         LE_ENV: $(letsEncryptEnvironment)
+        AZURE_SUBSCRIPTION_ID: $(azureSubscriptionId)
