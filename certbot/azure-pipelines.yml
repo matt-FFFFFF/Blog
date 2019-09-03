@@ -30,6 +30,12 @@ stages:
         azureSubscription: $(azureSubscription)
         failOnStandardError: true
     - task: PowerShell@2
+      displayName: Install Posh-ACME
+      inputs:
+        targetType: inline
+        script: Install-Module Posh-ACME -Force -Verbose -Scope CurrentUser
+        failOnStderr: true
+    - task: PowerShell@2
       displayName: Posh-ACME
       inputs:
         targetType: filePath
