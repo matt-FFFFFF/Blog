@@ -1,6 +1,6 @@
 $domain = 'mattwhite.blog'
 
-Set-PAServer LE_PROD
+Set-PAServer $Env:LE_ENV
 
 # Get a new certificate or submit a renewal. Renewals not yet supported due to token expiry.
 # TO implement renewals, wil lneed to modify token inside plugindata.xml
