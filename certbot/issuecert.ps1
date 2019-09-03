@@ -12,7 +12,7 @@ New-PACertificate $domain `
             -DnsPlugin Azure `
             -PluginArgs @{
                 AZSubscriptionId=$Env:AZURE_SUBSCRIPTION_ID;
-                AZAccessToken=$token
+                AZAccessToken=$Env:AZURE_TOKEN
             }
                     
 $cert = Get-PACertificate -MainDomain $domain
