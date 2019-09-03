@@ -28,7 +28,7 @@ stages:
     - task: AzureCLI@1
       inputs:
         scriptLocation: inlineScript
-        inlineScript: "echo ##vso[task.setvariable variable=azureToken;]`az account get-access-token --resource 'https://management.core.windows.net' --query accessToken --output tsv`"
+        inlineScript: "echo `az account get-access-token --resource 'https://management.core.windows.net' --query accessToken --output tsv` >$(Agent.TempDirectory)/token"
         azureSubscription: $(azureSubscription)
         failOnStandardError: true
     - task: PowerShell@2
@@ -49,6 +49,6 @@ stages:
         workingDirectory: $(System.DefaultWorkingDirectory)/certbot
       env:
         POSHACME_HOME: $(Agent.TempDirectory)/Posh-ACME
-        AZURE_TOKEN: $(azureToken)
+        AGENT_TEMP: $(Agent.TempDirectory)
         LE_ENV: $(letsEncryptEnvironment)
         AZURE_SUBSCRIPTION_ID: $(azureSubscriptionId)
