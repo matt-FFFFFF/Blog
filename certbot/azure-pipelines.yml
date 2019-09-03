@@ -35,6 +35,10 @@ stages:
         targetType: inline
         script: Install-Module Posh-ACME -Force -Verbose -Scope CurrentUser
         failOnStderr: true
+    - script: mkdir $AGENT_TEMPDIR/Post-ACME
+      displayName: Make temp directory
+      env:
+        AGENT_TEMPDIR: $(Agent.TempDirectory)
     - task: PowerShell@2
       displayName: Posh-ACME
       inputs:
