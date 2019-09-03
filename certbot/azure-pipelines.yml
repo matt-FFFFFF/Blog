@@ -1,0 +1,38 @@
+# Issue certificates
+
+trigger: none
+
+schedules:
+  - cron: "0 0 * * *"
+    displayName: Daily certificate issuue or renew
+    always: true
+
+variables:
+  skipComponentGovernanceDetection: true
+  azureSubscription: mattwhiteazuresub
+
+stages:
+- stage: Certificate
+  displayName: Certificate
+  jobs:
+  - job: 
+    displayName: Issue or renew certificate
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: AzureCLI@1
+      inputs:
+        scriptLocation: inlineScript
+        inlineScript: "echo ##vso[task.setvariable variable=azureToken;]`az account get-access-token --resource 'https://management.core.windows.net' --query accessToken --output tsv`"
+        azureSubscription: $(azureSubscription)
+        failOnStandardError: true
+    - task: PowerShell@2
+      displayName: Posh-ACME
+      inputs:
+        targetType: filePath
+        filePath: issuecert.ps1
+        failOnStderr: true
+        workingDirectory: $(Build.Repository.LocalPath)/certbot
+      env:
+        POSHACME_HOME: $(Agent.TempDirectory)/Posh-ACME
+        AZURE_TOKEN: $(azureToken)

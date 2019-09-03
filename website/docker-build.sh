@@ -1,6 +1,5 @@
 #!/bin/bash
 
-UID=$(id -u)
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 HUGO_VERSION=$(cat $DIR/HUGO_VERSION)
 

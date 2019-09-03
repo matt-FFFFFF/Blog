@@ -10,12 +10,14 @@ variables:
   northEuropeStorageAccount: mattwhiteblognortheurope
   azureSubscription: mattwhiteazuresub
   sasTokenTimeoutInMinutes: 30
+  azStorageBlobDeleteBatchCommand: az storage blob delete-batch --source '$web' --account-name
 
 stages:
 - stage: Build
   displayName: Build website using Hugo
   variables:
     dockerVersion: 19.03.1
+    containerImage: klakegg/hugo
   jobs:
   - job: containerbuild
     displayName: Build website using Docker container
@@ -33,7 +35,9 @@ stages:
         containerRegistry: dockerhub
     - script: |
         export HUGO_VERSION=`cat HUGO_VERSION`
-        docker pull klakegg/hugo:$HUGO_VERSION-ext
+        docker pull $CONTAINER_IMAGE:$HUGO_VERSION-ext
+      env:
+        CONTAINER_IMAGE: $(containerImage)
       displayName: Docker pull
       workingDirectory: $(Build.Repository.LocalPath)/website
     - script: |
@@ -61,6 +65,12 @@ stages:
       vmImage: 'windows-latest'
     steps:
     - checkout: none
+    - task: AzureCLI@1
+      inputs:
+        azureSubscription: $(azureSubscription)
+        scriptLocation: inlineScript
+        inlineScript: $(azStorageBlobDeleteBatchCommand) $(westEuropeStorageAccount)
+        failOnStandardError: true
     - task: DownloadPipelineArtifact@2
       inputs:
         artifactName: website
@@ -73,13 +83,19 @@ stages:
         destination: azureBlob
         storage: $(westEuropeStorageAccount)
         containerName: '$web'
-        sasTokenTimeOutInMinutes: 30
+        sasTokenTimeOutInMinutes: $(sasTokenTimeoutInMinutes)
 
   - job: northeuropecopy
     pool:
       vmImage: 'windows-latest'
     steps:
     - checkout: none
+    - task: AzureCLI@1
+      inputs:
+        azureSubscription: $(azureSubscription)
+        scriptLocation: inlineScript
+        inlineScript: $(azStorageBlobDeleteBatchCommand) $(northEuropeStorageAccount)
+        failOnStandardError: true
     - task: DownloadPipelineArtifact@2
       inputs:
         artifactName: website
@@ -92,4 +108,4 @@ stages:
         destination: azureBlob
         storage: $(northEuropeStorageAccount)
         containerName: '$web'
-        sasTokenTimeOutInMinutes: 30
+        sasTokenTimeOutInMinutes: $(sasTokenTimeoutInMinutes)
