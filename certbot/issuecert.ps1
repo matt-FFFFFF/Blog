@@ -9,7 +9,8 @@ New-PACertificate $domain `
             -Contact 'matt.white@microsoft.com' `
             -DnsPlugin Azure `
             -PluginArgs @{
-            AZSubscriptionId=$((Get-AzContext).Subscription);
-            AZAccessToken=$($Env:AZURE_TOKEN)
+                AZSubscriptionId=$((Get-AzContext).Subscription);
+                AZAccessToken=$($Env:AZURE_TOKEN)
+            }
                     
 $cert = Get-PACertificate -MainDomain $domain
