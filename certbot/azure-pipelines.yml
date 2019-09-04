@@ -26,7 +26,7 @@ stages:
       vmImage: 'ubuntu-latest'
     steps:
     - task: AzureCLI@1
-      displayName: Generate token
+      displayName: az cli generate token
       inputs:
         scriptLocation: inlineScript
         inlineScript: "echo '##vso[task.setvariable variable=azureToken]'`az account get-access-token --resource 'https://management.core.windows.net/' --query accessToken --output tsv`"
@@ -53,3 +53,16 @@ stages:
         AZURE_TOKEN: $(azureToken)
         LE_ENV: $(letsEncryptEnvironment)
         AZURE_SUBSCRIPTION_ID: $(azureSubscriptionId)
+    - task: CmdLine@2
+      displayName: OpenSSL generate PFX
+      inputs:
+        workingDirectory: $(Agent.TempDirectory)/Posh-ACME
+        failOnStderr: true
+        script: |
+          cd `cat current-server.txt| cut -d'/' -f 3`
+          cd `cat current-account.txt`
+          cd `cat current-order.txt`
+          openssl pkcs12 -export -inkey cert.key -in cert.cer -certfile chain.cer -out $AGENT_TEMP/cert-nopasswd.pfx -passout pass:
+      env:
+        AGENT_TEMP: $(Agent.TempDirectory)
+        
