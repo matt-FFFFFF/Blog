@@ -15,7 +15,9 @@ variables:
   northEuropeStorageAccount: mattwhiteblognortheurope
   azureSubscription: mattwhiteazuresub
   sasTokenTimeoutInMinutes: 30
-  azStorageBlobDeleteBatchCommand: az storage blob delete-batch --source '$web' --account-name
+  resourceGroup: blog
+  frontDoorName: mattwhiteblog
+  backendPoolName: blogstatic
 
 stages:
 - stage: Build
@@ -67,50 +69,92 @@ stages:
   jobs:
   - job: westeuropecopy
     pool:
-      vmImage: 'windows-latest'
+      vmImage: 'ubuntu-latest'
     steps:
     - checkout: none
-    - task: AzureCLI@1
+    - task: AzurePowerShell@4
+      displayName: Disable backend
       inputs:
         azureSubscription: $(azureSubscription)
-        scriptLocation: inlineScript
-        inlineScript: $(azStorageBlobDeleteBatchCommand) $(westEuropeStorageAccount)
+        ScriptType: FilePath
+        ScriptPath: scripts/disable-frontdoorbackend.ps1
+        ScriptArguments: -storageAccountName $(westEuropeStorageAccount) -resourceGroupName $(resourceGroup) -frontDoorName $(frontDoorName) -backendPoolName $(backendPoolName) -State Disabled
+        FailOnStandardError: true
+    - task: AzureCLI@1
+      displayName: Clean storage account
+      inputs:
+        azureSubscription: $(azureSubscription)
+        scriptLocation: scriptPath
+        scriptPath: scripts/deletebatch.azcli
         failOnStandardError: true
+      env:
+        ACCOUNT_NAME: $(westEuropeStorageAccount)
     - task: DownloadPipelineArtifact@2
       inputs:
         artifactName: website
         buildType: current
         targetPath: $(Pipeline.Workspace)/website
-    - task: AzureFileCopy@3
+    - task: AzureCLI@1
+      displayName: Upload website files
       inputs:
-        sourcePath: $(Pipeline.Workspace)/website
         azureSubscription: $(azureSubscription)
-        destination: azureBlob
-        storage: $(westEuropeStorageAccount)
-        containerName: '$web'
-        sasTokenTimeOutInMinutes: $(sasTokenTimeoutInMinutes)
-
+        scriptLocation: scriptPath
+        scriptPath: scripts/uploadbatch.azcli
+        failOnStandardError: true
+      env:
+        SOURCE: $(Pipeline.Workspace)/website
+        ACCOUNT_NAME: $(westEuropeStorageAccount)
+    - task: AzurePowerShell@4
+      displayName: Enable backend
+      inputs:
+        azureSubscription: $(azureSubscription)
+        ScriptType: FilePath
+        ScriptPath: scripts/disable-frontdoorbackend.ps1
+        ScriptArguments: -storageAccountName $(westEuropeStorageAccount) -resourceGroupName $(resourceGroup) -frontDoorName $(frontDoorName) -backendPoolName $(backendPoolName) -State Enabled
+        FailOnStandardError: true
   - job: northeuropecopy
+    dependsOn: westeuropecopy
     pool:
       vmImage: 'windows-latest'
     steps:
     - checkout: none
-    - task: AzureCLI@1
+    - task: AzurePowerShell@4
+      displayName: Disable backend
       inputs:
         azureSubscription: $(azureSubscription)
-        scriptLocation: inlineScript
-        inlineScript: $(azStorageBlobDeleteBatchCommand) $(northEuropeStorageAccount)
+        ScriptType: FilePath
+        ScriptPath: scripts/disable-frontdoorbackend.ps1
+        ScriptArguments: -storageAccountName $(northEuropeStorageAccount) -resourceGroupName $(resourceGroup) -frontDoorName $(frontDoorName) -backendPoolName $(backendPoolName) -State Disabled
+        FailOnStandardError: true
+    - task: AzureCLI@1
+      displayName: Clean storage account
+      inputs:
+        azureSubscription: $(azureSubscription)
+        scriptLocation: scriptPath
+        scriptPath: scripts/deletebatch.azcli
         failOnStandardError: true
+      env:
+        ACCOUNT_NAME: $(westEuropeStorageAccount)
     - task: DownloadPipelineArtifact@2
       inputs:
         artifactName: website
         buildType: current
         targetPath: $(Pipeline.Workspace)/website
-    - task: AzureFileCopy@3
+    - task: AzureCLI@1
+      displayName: Upload website files
       inputs:
-        sourcePath: $(Pipeline.Workspace)/website
         azureSubscription: $(azureSubscription)
-        destination: azureBlob
-        storage: $(northEuropeStorageAccount)
-        containerName: '$web'
-        sasTokenTimeOutInMinutes: $(sasTokenTimeoutInMinutes)
+        scriptLocation: scriptPath
+        scriptPath: scripts/uploadbatch.azcli
+        failOnStandardError: true
+      env:
+        SOURCE: $(Pipeline.Workspace)/website
+        ACCOUNT_NAME: $(northEuropeStorageAccount)
+    - task: AzurePowerShell@4
+      displayName: Enable backend
+      inputs:
+        azureSubscription: $(azureSubscription)
+        ScriptType: FilePath
+        ScriptPath: scripts/disable-frontdoorbackend.ps1
+        ScriptArguments: -storageAccountName $(northEuropeStorageAccount) -resourceGroupName $(resourceGroup) -frontDoorName $(frontDoorName) -backendPoolName $(backendPoolName) -State Enabled
+        FailOnStandardError: true

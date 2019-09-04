@@ -11,6 +11,7 @@ New-PACertificate $domain `
             -PluginArgs @{
                 AZSubscriptionId=$Env:AZURE_SUBSCRIPTION_ID;
                 AZAccessToken=$Env:AZURE_TOKEN
-            }
+            } `
+            -Verbose
                     
 $cert = Get-PACertificate -MainDomain $domain
