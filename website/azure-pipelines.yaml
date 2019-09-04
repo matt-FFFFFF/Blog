@@ -115,7 +115,7 @@ stages:
   - job: northeuropecopy
     dependsOn: westeuropecopy
     pool:
-      vmImage: 'windows-latest'
+      vmImage: 'ubuntu-latest'
     steps:
     - checkout: none
     - task: AzurePowerShell@4
