@@ -62,7 +62,7 @@ stages:
         targetPath: $(Build.ArtifactStagingDirectory)
         artifact: website
 
-- stage: deploy
+- stage: Deploy
   displayName: Deploy website to Azure Storage
   dependsOn: Build
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
