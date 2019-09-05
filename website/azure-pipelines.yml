@@ -181,7 +181,7 @@ stages:
       vmImage: 'ubuntu-latest'
     steps:
     - script: |
-        az extension add front-door 
+        az extension add --name front-door 
       displayName: Add az cli front-door extension
     - task: AzureCLI@1
       displayName: Purge cache
