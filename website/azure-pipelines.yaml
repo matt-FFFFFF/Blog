@@ -79,6 +79,7 @@ stages:
       inputs:
         azureSubscription: $(azureSubscription)
         ScriptType: FilePath
+        azurePowerShellVersion: LatestVersion
         ScriptPath: $(Build.SourcesDirectory)/scripts/set-frontdoorbackend.ps1
         ScriptArguments: -storageAccountName $(storageaccount) -resourceGroupName $(resourceGroup) -frontDoorName $(frontDoorName) -backendPoolName $(backendPoolName) -State Disabled
         FailOnStandardError: true
@@ -111,6 +112,7 @@ stages:
       inputs:
         azureSubscription: $(azureSubscription)
         ScriptType: FilePath
+        azurePowerShellVersion: LatestVersion
         ScriptPath: $(Build.SourcesDirectory)/scripts/set-frontdoorbackend.ps1
         ScriptArguments: -storageAccountName $(storageaccount) -resourceGroupName $(resourceGroup) -frontDoorName $(frontDoorName) -backendPoolName $(backendPoolName) -State Enabled
         FailOnStandardError: true
@@ -123,13 +125,14 @@ stages:
     steps:
     - script: |
         sudo /usr/bin/pwsh -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -File "$(Build.SourcesDirectory)/scripts/install-azmodule.ps1"
-      displayName: Install az pwsh module      
+      displayName: Install az pwsh module
     - task: AzurePowerShell@4
       displayName: Disable backend
       inputs:
         azureSubscription: $(azureSubscription)
         ScriptType: FilePath
-        ScriptPath: $(Build.SourcesDirectory)/scripts/set-frontdoorbackend.ps1
+        azurePowerShellVersion: LatestVersion
+        ScriptPath: $(Build.SourcesDirectory)/scripts/setfrontdoorbackend.ps1
         ScriptArguments: -storageAccountName $(storageaccount) -resourceGroupName $(resourceGroup) -frontDoorName $(frontDoorName) -backendPoolName $(backendPoolName) -State Disabled
         FailOnStandardError: true
     - task: AzureCLI@1
@@ -161,6 +164,7 @@ stages:
       inputs:
         azureSubscription: $(azureSubscription)
         ScriptType: FilePath
+        azurePowerShellVersion: LatestVersion
         ScriptPath: $(Build.SourcesDirectory)/scripts/set-frontdoorbackend.ps1
         ScriptArguments: -storageAccountName $(storageaccount) -resourceGroupName $(resourceGroup) -frontDoorName $(frontDoorName) -backendPoolName $(backendPoolName) -State Enabled
         FailOnStandardError: true
