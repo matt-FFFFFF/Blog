@@ -11,8 +11,6 @@ trigger:
 
 variables:
   skipComponentGovernanceDetection: true
-  westEuropeStorageAccount: mattwhiteblogwesteurope
-  northEuropeStorageAccount: mattwhiteblognortheurope
   azureSubscription: mattwhiteazuresub
   sasTokenTimeoutInMinutes: 30
   resourceGroup: blog
@@ -70,6 +68,8 @@ stages:
   - job: westeuropecopy
     pool:
       vmImage: 'ubuntu-latest'
+    variables:
+    - group: westeurope
     steps:
     - checkout: none
     - task: AzurePowerShell@4
@@ -77,8 +77,8 @@ stages:
       inputs:
         azureSubscription: $(azureSubscription)
         ScriptType: FilePath
-        ScriptPath: scripts/disable-frontdoorbackend.ps1
-        ScriptArguments: -storageAccountName $(westEuropeStorageAccount) -resourceGroupName $(resourceGroup) -frontDoorName $(frontDoorName) -backendPoolName $(backendPoolName) -State Disabled
+        ScriptPath: scripts/set-frontdoorbackend.ps1
+        ScriptArguments: -storageAccountName $(storageaccount) -resourceGroupName $(resourceGroup) -frontDoorName $(frontDoorName) -backendPoolName $(backendPoolName) -State Disabled
         FailOnStandardError: true
     - task: AzureCLI@1
       displayName: Clean storage account
@@ -88,7 +88,7 @@ stages:
         scriptPath: scripts/deletebatch.azcli
         failOnStandardError: true
       env:
-        ACCOUNT_NAME: $(westEuropeStorageAccount)
+        ACCOUNT_NAME: $(storageaccount)
     - task: DownloadPipelineArtifact@2
       inputs:
         artifactName: website
@@ -103,19 +103,21 @@ stages:
         failOnStandardError: true
       env:
         SOURCE: $(Pipeline.Workspace)/website
-        ACCOUNT_NAME: $(westEuropeStorageAccount)
+        ACCOUNT_NAME: $(storageaccount)
     - task: AzurePowerShell@4
       displayName: Enable backend
       inputs:
         azureSubscription: $(azureSubscription)
         ScriptType: FilePath
-        ScriptPath: scripts/disable-frontdoorbackend.ps1
-        ScriptArguments: -storageAccountName $(westEuropeStorageAccount) -resourceGroupName $(resourceGroup) -frontDoorName $(frontDoorName) -backendPoolName $(backendPoolName) -State Enabled
+        ScriptPath: scripts/set-frontdoorbackend.ps1
+        ScriptArguments: -storageAccountName $(storageaccount) -resourceGroupName $(resourceGroup) -frontDoorName $(frontDoorName) -backendPoolName $(backendPoolName) -State Enabled
         FailOnStandardError: true
   - job: northeuropecopy
     dependsOn: westeuropecopy
     pool:
       vmImage: 'ubuntu-latest'
+    variables:
+    - group: northeurope
     steps:
     - checkout: none
     - task: AzurePowerShell@4
@@ -123,8 +125,8 @@ stages:
       inputs:
         azureSubscription: $(azureSubscription)
         ScriptType: FilePath
-        ScriptPath: scripts/disable-frontdoorbackend.ps1
-        ScriptArguments: -storageAccountName $(northEuropeStorageAccount) -resourceGroupName $(resourceGroup) -frontDoorName $(frontDoorName) -backendPoolName $(backendPoolName) -State Disabled
+        ScriptPath: scripts/set-frontdoorbackend.ps1
+        ScriptArguments: -storageAccountName $(storageaccount) -resourceGroupName $(resourceGroup) -frontDoorName $(frontDoorName) -backendPoolName $(backendPoolName) -State Disabled
         FailOnStandardError: true
     - task: AzureCLI@1
       displayName: Clean storage account
@@ -134,7 +136,7 @@ stages:
         scriptPath: scripts/deletebatch.azcli
         failOnStandardError: true
       env:
-        ACCOUNT_NAME: $(westEuropeStorageAccount)
+        ACCOUNT_NAME: $(storageaccount)
     - task: DownloadPipelineArtifact@2
       inputs:
         artifactName: website
@@ -149,12 +151,12 @@ stages:
         failOnStandardError: true
       env:
         SOURCE: $(Pipeline.Workspace)/website
-        ACCOUNT_NAME: $(northEuropeStorageAccount)
+        ACCOUNT_NAME: $(storageaccount)
     - task: AzurePowerShell@4
       displayName: Enable backend
       inputs:
         azureSubscription: $(azureSubscription)
         ScriptType: FilePath
-        ScriptPath: scripts/disable-frontdoorbackend.ps1
-        ScriptArguments: -storageAccountName $(northEuropeStorageAccount) -resourceGroupName $(resourceGroup) -frontDoorName $(frontDoorName) -backendPoolName $(backendPoolName) -State Enabled
+        ScriptPath: scripts/set-frontdoorbackend.ps1
+        ScriptArguments: -storageAccountName $(storageaccount) -resourceGroupName $(resourceGroup) -frontDoorName $(frontDoorName) -backendPoolName $(backendPoolName) -State Enabled
         FailOnStandardError: true
