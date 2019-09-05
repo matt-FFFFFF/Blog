@@ -76,7 +76,7 @@ stages:
       inputs:
         azureSubscription: $(azureSubscription)
         ScriptType: FilePath
-        ScriptPath: scripts/set-frontdoorbackend.ps1
+        ScriptPath: $(Build.SourcesDirectory)/scripts/set-frontdoorbackend.ps1
         ScriptArguments: -storageAccountName $(storageaccount) -resourceGroupName $(resourceGroup) -frontDoorName $(frontDoorName) -backendPoolName $(backendPoolName) -State Disabled
         FailOnStandardError: true
     - task: AzureCLI@1
@@ -84,7 +84,7 @@ stages:
       inputs:
         azureSubscription: $(azureSubscription)
         scriptLocation: scriptPath
-        scriptPath: scripts/deletebatch.azcli
+        scriptPath: $(Build.SourcesDirectory)/scripts/deletebatch.azcli
         failOnStandardError: true
       env:
         ACCOUNT_NAME: $(storageaccount)
@@ -98,7 +98,7 @@ stages:
       inputs:
         azureSubscription: $(azureSubscription)
         scriptLocation: scriptPath
-        scriptPath: scripts/uploadbatch.azcli
+        scriptPath: $(Build.SourcesDirectory)/scripts/uploadbatch.azcli
         failOnStandardError: true
       env:
         SOURCE: $(Pipeline.Workspace)/website
@@ -108,7 +108,7 @@ stages:
       inputs:
         azureSubscription: $(azureSubscription)
         ScriptType: FilePath
-        ScriptPath: scripts/set-frontdoorbackend.ps1
+        ScriptPath: $(Build.SourcesDirectory)/scripts/set-frontdoorbackend.ps1
         ScriptArguments: -storageAccountName $(storageaccount) -resourceGroupName $(resourceGroup) -frontDoorName $(frontDoorName) -backendPoolName $(backendPoolName) -State Enabled
         FailOnStandardError: true
   - job: northeuropecopy
@@ -123,7 +123,7 @@ stages:
       inputs:
         azureSubscription: $(azureSubscription)
         ScriptType: FilePath
-        ScriptPath: scripts/set-frontdoorbackend.ps1
+        ScriptPath: $(Build.SourcesDirectory)/scripts/set-frontdoorbackend.ps1
         ScriptArguments: -storageAccountName $(storageaccount) -resourceGroupName $(resourceGroup) -frontDoorName $(frontDoorName) -backendPoolName $(backendPoolName) -State Disabled
         FailOnStandardError: true
     - task: AzureCLI@1
@@ -131,7 +131,7 @@ stages:
       inputs:
         azureSubscription: $(azureSubscription)
         scriptLocation: scriptPath
-        scriptPath: scripts/deletebatch.azcli
+        scriptPath: $(Build.SourcesDirectory)/scripts/deletebatch.azcli
         failOnStandardError: true
       env:
         ACCOUNT_NAME: $(storageaccount)
@@ -145,7 +145,7 @@ stages:
       inputs:
         azureSubscription: $(azureSubscription)
         scriptLocation: scriptPath
-        scriptPath: scripts/uploadbatch.azcli
+        scriptPath: $(Build.SourcesDirectory)/scripts/uploadbatch.azcli
         failOnStandardError: true
       env:
         SOURCE: $(Pipeline.Workspace)/website
@@ -155,6 +155,6 @@ stages:
       inputs:
         azureSubscription: $(azureSubscription)
         ScriptType: FilePath
-        ScriptPath: scripts/set-frontdoorbackend.ps1
+        ScriptPath: $(Build.SourcesDirectory)/scripts/set-frontdoorbackend.ps1
         ScriptArguments: -storageAccountName $(storageaccount) -resourceGroupName $(resourceGroup) -frontDoorName $(frontDoorName) -backendPoolName $(backendPoolName) -State Enabled
         FailOnStandardError: true
