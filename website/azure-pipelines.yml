@@ -70,7 +70,7 @@ stages:
   dependsOn: Build
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
-  - job: westeuropec
+  - job: westeurope
     pool:
       vmImage: 'ubuntu-latest'
     variables:
