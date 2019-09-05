@@ -70,7 +70,7 @@ stages:
   dependsOn: Build
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
-  - job: westeuropecopy
+  - job: westeuropec
     pool:
       vmImage: 'ubuntu-latest'
     variables:
@@ -121,8 +121,8 @@ stages:
         ScriptPath: $(Build.SourcesDirectory)/scripts/setfrontdoorbackend.ps1
         ScriptArguments: -storageAccountName $(storageaccount) -resourceGroupName $(resourceGroup) -frontDoorName $(frontDoorName) -backendPoolName $(backendPoolName) -State Enabled
         FailOnStandardError: true
-  - job: northeuropecopy
-    dependsOn: westeuropecopy
+  - job: northeurope
+    dependsOn: westeurope
     pool:
       vmImage: 'ubuntu-latest'
     variables:
@@ -175,18 +175,17 @@ stages:
         FailOnStandardError: true
   - job: purgecache
     dependsOn: 
-    - westeuropecopy
-    - northeuropecopy
+    - westeurope
+    - northeurope
     pool:
       vmImage: 'ubuntu-latest'
     steps:
-    - script: |
-        az extension add --name front-door 
-      displayName: Add az cli front-door extension
     - task: AzureCLI@1
       displayName: Purge cache
       inputs:
         azureSubscription: $(azureSubscription)
-        inlineScript: az network front-door purge-endpoint --resource-group $(resourceGroup) --name $(frontDoorName) --content-paths "/*" 
+        inlineScript: |
+          az extension add --name front-door
+          az network front-door purge-endpoint --resource-group $(resourceGroup) --name $(frontDoorName) --content-paths "/*" 
         scriptLocation: inlineScript
         failOnStandardError: true
