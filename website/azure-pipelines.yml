@@ -7,6 +7,11 @@ trigger:
   paths:
     include:
     - website/*
+    exclude:
+      - website/azure-pipelines.yml
+      - website/LICENSE
+      - website.*
+      - website/docker-*
 
 
 variables:
