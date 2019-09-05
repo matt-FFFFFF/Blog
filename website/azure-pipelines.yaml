@@ -71,7 +71,6 @@ stages:
     variables:
     - group: westeurope
     steps:
-    - checkout: none
     - task: AzurePowerShell@4
       displayName: Disable backend
       inputs:
@@ -119,7 +118,6 @@ stages:
     variables:
     - group: northeurope
     steps:
-    - checkout: none
     - task: AzurePowerShell@4
       displayName: Disable backend
       inputs:
