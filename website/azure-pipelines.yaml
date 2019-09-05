@@ -80,7 +80,7 @@ stages:
         azureSubscription: $(azureSubscription)
         ScriptType: FilePath
         azurePowerShellVersion: LatestVersion
-        ScriptPath: $(Build.SourcesDirectory)/scripts/set-frontdoorbackend.ps1
+        ScriptPath: $(Build.SourcesDirectory)/scripts/setfrontdoorbackend.ps1
         ScriptArguments: -storageAccountName $(storageaccount) -resourceGroupName $(resourceGroup) -frontDoorName $(frontDoorName) -backendPoolName $(backendPoolName) -State Disabled
         FailOnStandardError: true
     - task: AzureCLI@1
@@ -113,7 +113,7 @@ stages:
         azureSubscription: $(azureSubscription)
         ScriptType: FilePath
         azurePowerShellVersion: LatestVersion
-        ScriptPath: $(Build.SourcesDirectory)/scripts/set-frontdoorbackend.ps1
+        ScriptPath: $(Build.SourcesDirectory)/scripts/setfrontdoorbackend.ps1
         ScriptArguments: -storageAccountName $(storageaccount) -resourceGroupName $(resourceGroup) -frontDoorName $(frontDoorName) -backendPoolName $(backendPoolName) -State Enabled
         FailOnStandardError: true
   - job: northeuropecopy
@@ -165,6 +165,6 @@ stages:
         azureSubscription: $(azureSubscription)
         ScriptType: FilePath
         azurePowerShellVersion: LatestVersion
-        ScriptPath: $(Build.SourcesDirectory)/scripts/set-frontdoorbackend.ps1
+        ScriptPath: $(Build.SourcesDirectory)/scripts/setfrontdoorbackend.ps1
         ScriptArguments: -storageAccountName $(storageaccount) -resourceGroupName $(resourceGroup) -frontDoorName $(frontDoorName) -backendPoolName $(backendPoolName) -State Enabled
         FailOnStandardError: true
