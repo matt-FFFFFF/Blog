@@ -173,3 +173,20 @@ stages:
         ScriptPath: $(Build.SourcesDirectory)/scripts/setfrontdoorbackend.ps1
         ScriptArguments: -storageAccountName $(storageaccount) -resourceGroupName $(resourceGroup) -frontDoorName $(frontDoorName) -backendPoolName $(backendPoolName) -State Enabled
         FailOnStandardError: true
+  - job: purgecache
+    dependsOn: 
+    - westeuropecopy
+    - northeuropecopy
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - script: |
+        az extension add front-door 
+      displayName: Add az cli front-door extension
+    - task: AzureCLI@1
+      displayName: Purge cache
+      inputs:
+        azureSubscription: $(azureSubscription)
+        inlineScript: az network front-door purge-endpoint --resource-group $(resourceGroup) --name $(frontDoorName) --content-paths "/*" 
+        scriptLocation: inlineScript
+        failOnStandardError: true
