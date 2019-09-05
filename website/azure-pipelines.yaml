@@ -72,7 +72,7 @@ stages:
     - group: westeurope
     steps:
     - script: |
-        sudo /usr/bin/pwsh -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -File "$(Build.SourcesDirectory)/scripts/install-azmodules.ps1"
+        sudo /usr/bin/pwsh -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -File "$(Build.SourcesDirectory)/scripts/install-azmodule.ps1"
       displayName: Install az pwsh module
     - task: AzurePowerShell@4
       displayName: Disable backend
@@ -122,7 +122,7 @@ stages:
     - group: northeurope
     steps:
     - script: |
-        sudo /usr/bin/pwsh -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -File "$(Build.SourcesDirectory)/scripts/install-azmodules.ps1"
+        sudo /usr/bin/pwsh -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -File "$(Build.SourcesDirectory)/scripts/install-azmodule.ps1"
       displayName: Install az pwsh module      
     - task: AzurePowerShell@4
       displayName: Disable backend
