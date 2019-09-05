@@ -104,7 +104,6 @@ stages:
         azureSubscription: $(azureSubscription)
         scriptLocation: scriptPath
         scriptPath: $(Build.SourcesDirectory)/scripts/uploadbatch.azcli
-        failOnStandardError: true
       env:
         SOURCE: $(Pipeline.Workspace)/website
         ACCOUNT_NAME: $(storageaccount)
@@ -157,7 +156,6 @@ stages:
         azureSubscription: $(azureSubscription)
         scriptLocation: scriptPath
         scriptPath: $(Build.SourcesDirectory)/scripts/uploadbatch.azcli
-        failOnStandardError: true
       env:
         SOURCE: $(Pipeline.Workspace)/website
         ACCOUNT_NAME: $(storageaccount)
