@@ -8,10 +8,10 @@ trigger:
     include:
     - website/*
     exclude:
-      - website/azure-pipelines.yml
-      - website/LICENSE
-      - website/.*
-      - website/docker-*
+    - website/azure-pipelines.yml
+    - website/LICENSE
+    - website/.*
+    - website/docker-*
 
 
 variables:
