@@ -4,7 +4,7 @@ trigger: none
 
 schedules:
   - cron: "0 0 * * *"
-    displayName: Daily certificate issuue or renew
+    displayName: Daily certificate issue or renew
     always: true
     branches:
       include:
@@ -14,7 +14,6 @@ variables:
   skipComponentGovernanceDetection: true
   azureSubscription: mattwhiteazuresub
   letsEncryptEnvironment: LE_STAGE
-  azureSubscriptionId: ***REMOVED***
 
 stages:
 - stage: Certificate
@@ -65,4 +64,14 @@ stages:
           openssl pkcs12 -export -inkey cert.key -in cert.cer -certfile chain.cer -out $AGENT_TEMP/cert-nopasswd.pfx -passout pass:
       env:
         AGENT_TEMP: $(Agent.TempDirectory)
+    - task: AzureCLI@1
+      displayName: Store certificate in Key Vault
+      inputs:
+        azureSubscription: $(azureSubscription)
+        scriptLocation: inlineScript
+        inlineScript: |
+          az keyault certificate import --vault-name $(keyVaultName) \
+                                        --name mattwhiteblog \
+                                        --file $(Agent.TempDirectory)/cert-nopasswd.pfx
+        
         
