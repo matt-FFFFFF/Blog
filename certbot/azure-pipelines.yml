@@ -13,7 +13,7 @@ schedules:
 variables:
   skipComponentGovernanceDetection: true
   azureSubscription: mattwhiteazuresub
-  letsEncryptEnvironment: LE_STAGE
+  letsEncryptEnvironment: LE_PROD
 
 stages:
 - stage: Certificate
@@ -61,7 +61,7 @@ stages:
           cd `cat current-server.txt| cut -d'/' -f 3`
           cd `cat current-account.txt`
           cd `cat current-order.txt`
-          openssl pkcs12 -export -inkey cert.key -in cert.cer -certfile chain.cer -out $AGENT_TEMP/cert-nopasswd.pfx -passout pass:
+          openssl pkcs12 -export keypbe NONE -certpbe NONE -inkey cert.key -in cert.cer -certfile chain.cer -out $AGENT_TEMP/cert-nopasswd.pfx -passout pass:
       env:
         AGENT_TEMP: $(Agent.TempDirectory)
     - task: AzureCLI@1
