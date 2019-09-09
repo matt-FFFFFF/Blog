@@ -28,7 +28,7 @@ stages:
       displayName: az cli generate token
       inputs:
         scriptLocation: inlineScript
-        inlineScript: "echo '##vso[task.setvariable variable=azureToken]'`az account get-access-token --resource 'https://management.core.windows.net/' --query accessToken --output tsv`"
+        inlineScript: "echo '##vso[task.setvariable variable=azureToken;issecret=true]'`az account get-access-token --resource 'https://management.core.windows.net/' --query accessToken --output tsv`"
         azureSubscription: $(azureSubscription)
         failOnStandardError: true
     - task: PowerShell@2
@@ -70,7 +70,7 @@ stages:
         azureSubscription: $(azureSubscription)
         scriptLocation: inlineScript
         inlineScript: |
-          az keyault certificate import --vault-name $(keyVaultName) \
+          az keyvault certificate import --vault-name $(keyVaultName) \
                                         --name mattwhiteblog \
                                         --file $(Agent.TempDirectory)/cert-nopasswd.pfx
         
