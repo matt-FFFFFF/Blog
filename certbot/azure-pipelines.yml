@@ -70,7 +70,7 @@ stages:
             exit 0
           fi
           az storage blob download --account-name $(leconfigstorageaccount) --container $(blobcontainer) --name acme.tar.gz.gpg --file acme.tar.gz.gpg
-          gpg --passphrase $PASSPHRASE --decrypt --symmetric acme.tar.gz.gpg
+          gpg --passphrase $PASSPHRASE --decrypt acme.tar.gz.gpg
           tar xvzf acme.tar.gz
         azureSubscription: $(AzureSubscription)
         workingDirectory: $(Agent.TempDirectory)
@@ -139,7 +139,7 @@ stages:
         inlineScript: |
           tar cvzf acme.tar.gz Posh-ACME
           gpg --help
-          gpg --passphrase $PASSPHRASE --encrypt --symmetric acme.tar.gz
+          gpg --passphrase $PASSPHRASE --symmetric acme.tar.gz
           rm -fr acme.tar.gz Posh-ACME
           az storage blob upload --account-name $(leconfigstorageaccount) --container $(blobcontainer) --name acme.tar.gz.gpg --file acme.tar.gz.gpg --validate-content
         azureSubscription: $(AzureSubscription)
