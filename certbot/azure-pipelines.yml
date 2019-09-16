@@ -15,6 +15,7 @@ variables:
   azureSubscription: mattwhiteazuresub
   letsEncryptEnvironment: LE_STAGE
   symmetricKeyName: leconfigsecretwrapped
+  blobcontainer: configprod
 
 stages:
 - stage: Certificate
@@ -60,13 +61,13 @@ stages:
       inputs:
         scriptLocation: inlineScript
         inlineScript: |
-          EXISTS=`az storage blob exists --name acme.tar.gz.gpg --container config --account-name $(leconfigstorageaccount) --query exists --output tsv`
+          EXISTS=`az storage blob exists --name acme.tar.gz.gpg --container $(blobcontainer) --account-name $(leconfigstorageaccount) --query exists --output tsv`
           if [ "$EXISTS" -eq 'false' ]; then
             echo "WARNING: ACME config backup not found. Creating..."
             mkdir -v Posh-ACME
             exit 0
           fi
-          az storage blob download --account-name $(leconfigstorageaccount) --container config --name acme.tar.gz.gpg
+          az storage blob download --account-name $(leconfigstorageaccount) --container $(blobcontainer) --name acme.tar.gz.gpg --file acme.tar.gz.gpg
           gpg --decrypt --symmetric --pinentry-mode loopback --passphrase $PASSPHRASE acme.tar.gz.gpg
           tar xvzf acme.tar.gz
         azureSubscription: $(AzureSubscription)
@@ -137,7 +138,7 @@ stages:
           tar cvzf acme.tar.gz Posh-ACME
           gpg --symmetric --pinentry-mode loopback --passphrase $PASSPHRASE acme.tar.gz
           rm -fr acme.tar.gz Posh-ACME
-          az storage blob upload --account-name $(leconfigstorageaccount) --container config --name acme.tar.gz.gpg --file acme.tar.gz.gpg --validate-content
+          az storage blob upload --account-name $(leconfigstorageaccount) --container $(blobcontainer) --name acme.tar.gz.gpg --file acme.tar.gz.gpg --validate-content
         azureSubscription: $(AzureSubscription)
         workingDirectory: $(Agent.TempDirectory)
       env:
