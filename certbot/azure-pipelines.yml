@@ -70,7 +70,7 @@ stages:
             exit 0
           fi
           az storage blob download --account-name $(leconfigstorageaccount) --container $(blobcontainer) --name acme.tar.gz.gpg --file acme.tar.gz.gpg
-          gpg --passphrase $PASSPHRASE --decrypt acme.tar.gz.gpg
+          gpg --passphrase $PASSPHRASE --decrypt acme.tar.gz.gpg >acme.tar.gz
           tar xvzf acme.tar.gz
         azureSubscription: $(AzureSubscription)
         workingDirectory: $(Agent.TempDirectory)
