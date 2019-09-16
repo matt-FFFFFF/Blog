@@ -44,11 +44,12 @@ stages:
     - script: |
         jq -n --arg data "$(leconfigsecretwrapped)" '. += { alg: "RSA-OAEP" } | .value += $data' > req.json
         HEADER="Authorization: Bearer $(vaultToken)"
-        URL="https://$(keyvaultName).vault.azure.net/keys/$(asymmetricKeyName)/$(asmmetricKeyVersion)/unwrapkey?api-version=7.0"
+        URL="https://$(keyvaultName).vault.azure.net/keys/$(asymmetricKeyName)/$(asymmetricKeyVersion)/unwrapkey?api-version=7.0"
         SYMKEY=`curl --header "$HEADER" --header "Content-Type: application/json" --data "@req.json" -X POST $URL | jq -r .value`
         rm -f req.json
         echo "##vso[task.setvariable variable=symmetricKey;issecret=true]$SYMKEY"
       displayName: Unwrap key
+      failOnStderr: true
       env:
         ASYMMETRICKEYNAME: $(asymmetricKeyName)
         ASYMMETRICKEYVERSION: $(asymmetricKeyVersion)
@@ -62,7 +63,7 @@ stages:
         scriptLocation: inlineScript
         inlineScript: |
           EXISTS=`az storage blob exists --name acme.tar.gz.gpg --container $(blobcontainer) --account-name $(leconfigstorageaccount) --query exists --output tsv`
-          if [ "$EXISTS" -eq 'false' ]; then
+          if [ "$EXISTS" -eq "false" ]; then
             echo "WARNING: ACME config backup not found. Creating..."
             mkdir -v Posh-ACME
             exit 0
