@@ -138,7 +138,8 @@ stages:
         scriptLocation: inlineScript
         inlineScript: |
           tar cvzf acme.tar.gz Posh-ACME
-          gpg --symmetric --pinentry-mode loopback --passphrase $PASSPHRASE acme.tar.gz
+          gpg --help
+          gpg --passphrase $PASSPHRASE --symmetric acme.tar.gz
           rm -fr acme.tar.gz Posh-ACME
           az storage blob upload --account-name $(leconfigstorageaccount) --container $(blobcontainer) --name acme.tar.gz.gpg --file acme.tar.gz.gpg --validate-content
         azureSubscription: $(AzureSubscription)
