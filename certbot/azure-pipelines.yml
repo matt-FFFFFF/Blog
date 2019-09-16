@@ -45,8 +45,9 @@ stages:
         jq -n --arg data "$(leconfigsecretwrapped)" '. += { alg: "RSA-OAEP" } | .value += $data' > req.json
         HEADER="Authorization: Bearer $(vaultToken)"
         URL="https://$(keyvaultName).vault.azure.net/keys/$(asymmetricKeyName)/$(asymmetricKeyVersion)/unwrapkey?api-version=7.0"
-        SYMKEY=`curl --header "$HEADER" --header "Content-Type: application/json" --data "@req.json" -X POST $URL | jq -r .value`
+        SYMKEY=`curl --silent --header "$HEADER" --header "Content-Type: application/json" --data "@req.json" -X POST $URL | jq -r .value`
         rm -f req.json
+        echo "Sym key hash `echo $SYMKEY | sha256sum`"
         echo "##vso[task.setvariable variable=symmetricKey;issecret=true]$SYMKEY"
       displayName: Unwrap key
       failOnStderr: true
