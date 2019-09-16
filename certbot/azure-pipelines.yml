@@ -16,6 +16,8 @@ variables:
   letsEncryptEnvironment: LE_STAGE
   symmetricKeyName: leconfigsecretwrapped
   blobcontainer: configprod
+  # Below should be renew or newcert
+  letsencryptoperation: newcert
 
 stages:
 - stage: Certificate
@@ -72,6 +74,8 @@ stages:
           az storage blob download --account-name $(leconfigstorageaccount) --container $(blobcontainer) --name acme.tar.gz.gpg --file acme.tar.gz.gpg
           gpg --passphrase $PASSPHRASE --decrypt acme.tar.gz.gpg >acme.tar.gz
           tar xvzf acme.tar.gz
+          rm -v acme.tar.gz acme.tar.gz.gpg
+          echo "##vso[task.setvariable variable=letsencryptoperation;issecret=true]renew""
         azureSubscription: $(AzureSubscription)
         workingDirectory: $(Agent.TempDirectory)
       env:
@@ -125,6 +129,7 @@ stages:
         azureSubscription: $(azureSubscription)
         scriptLocation: inlineScript
         inlineScript: |
+          # TODO: only store if new thumbprint is different to that in KV already
           CERTID=`az keyvault certificate import --vault-name $(keyVaultName) \
                                         --name mattwhiteblog \
                                         --file $(Agent.TempDirectory)/cert-nopasswd.pfx \
@@ -138,7 +143,6 @@ stages:
         scriptLocation: inlineScript
         inlineScript: |
           tar cvzf acme.tar.gz Posh-ACME
-          gpg --help
           gpg --passphrase $PASSPHRASE --symmetric acme.tar.gz
           rm -fr acme.tar.gz Posh-ACME
           az storage blob upload --account-name $(leconfigstorageaccount) --container $(blobcontainer) --name acme.tar.gz.gpg --file acme.tar.gz.gpg --validate-content
@@ -148,6 +152,8 @@ stages:
         PASSPHRASE: $(symmetricKey)
 
     - task: AzurePowerShell@4
+      # TODO: Add conditon on certificateVersion being not equal to ''
+      # This means we haev a new cert to roll out
       condition: and(succeeded(), eq(variables['letsEncryptEnvironment'], 'LE_PROD'))
       displayName: Enable-AzFrontDoorCustomHttps
       inputs:
