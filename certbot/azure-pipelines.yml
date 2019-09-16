@@ -64,7 +64,7 @@ stages:
         scriptLocation: inlineScript
         inlineScript: |
           EXISTS=`az storage blob exists --name acme.tar.gz.gpg --container $(blobcontainer) --account-name $(leconfigstorageaccount) --query exists --output tsv`
-          if [ "$EXISTS" -eq "false" ]; then
+          if [ "$EXISTS" == "false" ]; then
             echo "WARNING: ACME config backup not found. Creating..."
             mkdir -v Posh-ACME
             exit 0
