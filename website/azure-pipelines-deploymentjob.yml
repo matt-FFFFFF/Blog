@@ -1,0 +1,55 @@
+  jobs:
+  - deployment: ${{ parameters.name }}
+    pool:
+      vmImage: 'ubuntu-latest'
+    variables:
+    - group: ${{ parameters.name }}
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - script: |
+                sudo /usr/bin/pwsh -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -File "$(Build.SourcesDirectory)/scripts/install-azmodule.ps1"
+                sudo rm -rf ~/.Azure
+              displayName: Install az pwsh module
+            - task: AzurePowerShell@4
+              displayName: Disable backend
+              inputs:
+                azureSubscription: $(azureSubscription)
+                ScriptType: FilePath
+                azurePowerShellVersion: LatestVersion
+                ScriptPath: $(Build.SourcesDirectory)/scripts/setfrontdoorbackend.ps1
+                ScriptArguments: -storageAccountName $(storageaccount) -resourceGroupName $(resourceGroup) -frontDoorName $(frontDoorName) -backendPoolName $(backendPoolName) -State Disabled
+                FailOnStandardError: true
+            - task: AzureCLI@1
+              displayName: Clean storage account
+              inputs:
+                azureSubscription: $(azureSubscription)
+                scriptLocation: scriptPath
+                scriptPath: $(Build.SourcesDirectory)/scripts/deletebatch.azcli
+                failOnStandardError: true
+              env:
+                ACCOUNT_NAME: $(storageaccount)
+            - task: DownloadPipelineArtifact@2
+              inputs:
+                artifactName: website
+                buildType: current
+                targetPath: $(Pipeline.Workspace)/website
+            - task: AzureCLI@1
+              displayName: Upload website files
+              inputs:
+                azureSubscription: $(azureSubscription)
+                scriptLocation: scriptPath
+                scriptPath: $(Build.SourcesDirectory)/scripts/uploadbatch.azcli
+              env:
+                SOURCE: $(Pipeline.Workspace)/website
+                ACCOUNT_NAME: $(storageaccount)
+            - task: AzurePowerShell@4
+              displayName: Enable backend
+              inputs:
+                azureSubscription: $(azureSubscription)
+                ScriptType: FilePath
+                azurePowerShellVersion: LatestVersion
+                ScriptPath: $(Build.SourcesDirectory)/scripts/setfrontdoorbackend.ps1
+                ScriptArguments: -storageAccountName $(storageaccount) -resourceGroupName $(resourceGroup) -frontDoorName $(frontDoorName) -backendPoolName $(backendPoolName) -State Enabled
+                FailOnStandardError: true
