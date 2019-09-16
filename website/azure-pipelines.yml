@@ -9,6 +9,7 @@ trigger:
     - website/*
     exclude:
     - website/azure-pipelines.yml
+    - website/azure-pipelines-deploymentjob.yml
     - website/LICENSE
     - website/.*
     - website/docker-*

@@ -1,6 +1,9 @@
-$domain = 'mattwhite.blog'
+param(
+    [Parameter(Mandatory=$true,
+    ValueFromPipeline=$true)][string]$Domain
+)
 
-Set-PAServer $Env:LE_ENV
+Set-PAServer $Env:LE_ENV -ErrorAction Stop
 
 # Get a new certificate or submit a renewal. Renewals not yet supported due to token expiry.
 # To implement renewals, wil lneed to modify token inside plugindata.xml
@@ -11,10 +14,12 @@ switch ($Env:letsencryptoperation) {
         Submit-Renewal -PluginArgs @{
             AZSubscriptionId=$Env:AZURE_SUBSCRIPTION_ID;
             AZAccessToken=$Env:AZURE_TOKEN
-        }
+        } `
+        -NewKey `
+        -Verbose
     }
     "newcert" {
-        New-PACertificate $domain `
+        New-PACertificate $Domain `
             -AcceptTOS `
             -Contact 'matt.white@microsoft.com' `
             -DnsPlugin Azure `
@@ -24,6 +29,6 @@ switch ($Env:letsencryptoperation) {
             } `
             -Verbose
                     
-        Get-PACertificate -MainDomain $domain
+        Get-PACertificate -MainDomain $Domain
     }
 }
