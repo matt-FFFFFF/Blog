@@ -22,9 +22,10 @@ variables:
   resourceGroup: blog
   frontDoorName: mattwhiteblog
   backendPoolName: blogstatic
+  vmImage: ubuntu-latest
 
 stages:
-- stage: Build
+- stage: build
   displayName: Build website using Hugo
   variables:
     dockerVersion: 19.03.1
@@ -33,7 +34,7 @@ stages:
   - job: containerbuild
     displayName: Build website using Docker container
     pool:
-      vmImage: 'ubuntu-latest'
+      vmImage: $(vmImage)
     steps:
     - task: DockerInstaller@0
       inputs:
@@ -66,25 +67,74 @@ stages:
         targetPath: $(Build.ArtifactStagingDirectory)
         artifact: website
 
-- stage: Deploy
+- stage: deploy
   displayName: Deploy website to Azure Storage
   dependsOn: Build
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
-  - template: azure-pipelines-deploymentjob.yml
-    parameters:
-      name: westeurope
-    
-  - template: azure-pipelines-deploymentjob.yml
-    parameters:
-      name: northeurope
-
-  - job: purgecache
-    dependsOn: 
-    - westeurope
-    - northeurope
+  - deployment: rollout
     pool:
-      vmImage: 'ubuntu-latest'
+      vmImage: $(vmImage)
+    strategy:
+      rolling:
+        maxBatchSize: 1
+        selector: westeurope,northeurope
+        deploy:
+          steps:
+            - checkout: self
+            - script: |
+                sudo /usr/bin/pwsh -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -File "$(Build.SourcesDirectory)/scripts/install-azmodule.ps1"
+                sudo rm -rf ~/.Azure
+              displayName: Install az pwsh module
+            - task: AzurePowerShell@4
+              displayName: Disable backend
+              inputs:
+                azureSubscription: $(azureSubscription)
+                ScriptType: FilePath
+                azurePowerShellVersion: LatestVersion
+                ScriptPath: $(Build.SourcesDirectory)/scripts/setfrontdoorbackend.ps1
+                ScriptArguments: -storageAccountName mattwhiteblog$(selector) -resourceGroupName $(resourceGroup) -frontDoorName $(frontDoorName) -backendPoolName $(backendPoolName) -State Disabled
+                FailOnStandardError: true
+            - task: AzureCLI@1
+              displayName: Clean storage account
+              inputs:
+                azureSubscription: $(azureSubscription)
+                scriptLocation: scriptPath
+                scriptPath: $(Build.SourcesDirectory)/scripts/deletebatch.azcli
+                failOnStandardError: true
+              env:
+                ACCOUNT_NAME: $(storageaccount)
+            - task: DownloadPipelineArtifact@2
+              inputs:
+                artifactName: website
+                buildType: current
+                targetPath: $(Pipeline.Workspace)/website
+            - task: AzureCLI@1
+              displayName: Upload website files
+              inputs:
+                azureSubscription: $(azureSubscription)
+                scriptLocation: scriptPath
+                scriptPath: $(Build.SourcesDirectory)/scripts/uploadbatch.azcli
+              env:
+                SOURCE: $(Pipeline.Workspace)/website
+                ACCOUNT_NAME: $(storageaccount)
+            - task: AzurePowerShell@4
+              displayName: Enable backend
+              inputs:
+                azureSubscription: $(azureSubscription)
+                ScriptType: FilePath
+                azurePowerShellVersion: LatestVersion
+                ScriptPath: $(Build.SourcesDirectory)/scripts/setfrontdoorbackend.ps1
+                ScriptArguments: -storageAccountName $(storageaccount) -resourceGroupName $(resourceGroup) -frontDoorName $(frontDoorName) -backendPoolName $(backendPoolName) -State Enabled
+                FailOnStandardError: true
+
+- stage: finalise
+  dependsOn: deploy
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  jobs:  
+  - job: purgecache
+    pool:
+      vmImage: $(vmImage)
     steps:
     - task: AzureCLI@1
       displayName: Purge cache
