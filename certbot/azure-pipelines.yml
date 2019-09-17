@@ -75,7 +75,7 @@ stages:
           gpg --passphrase $PASSPHRASE --decrypt acme.tar.gz.gpg >acme.tar.gz
           tar xvzf acme.tar.gz
           rm -v acme.tar.gz acme.tar.gz.gpg
-          echo "##vso[task.setvariable variable=letsencryptoperation;issecret=true]renew""
+          echo "##vso[task.setvariable variable=letsencryptoperation;issecret=true]renew"
         azureSubscription: $(AzureSubscription)
         workingDirectory: $(Agent.TempDirectory)
       env:

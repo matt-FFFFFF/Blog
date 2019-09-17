@@ -9,6 +9,7 @@
       runOnce:
         deploy:
           steps:
+            - checkout: self
             - script: |
                 sudo /usr/bin/pwsh -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -File "$(Build.SourcesDirectory)/scripts/install-azmodule.ps1"
                 sudo rm -rf ~/.Azure
