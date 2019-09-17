@@ -11,7 +11,7 @@ paginatePath: page
 PygmentsCodeFences: true
 PygmentsUseClasses: true
 disqusShortname: mattwhiteblog
-googleAnalytics: ''
+googleAnalytics: 'UA-148159929-1'
 defaultContentLanguage: en
 defaultContentLanguageInSubdir: false
 permalinks:
@@ -29,11 +29,13 @@ params:
   since: '2019'
   rssFullContent: true
   keywords:
-    - Hugo
-    - theme
-    - den
+    - Azure
+    - blog
+    - hugo
+    - devops
+    - git
   description: >-
-    My Azure-related blog.
+    Adventures in Azure
   logoTitle: Home
   #siteLogoImage: images/globe.svg
   headerImage: images/blog-header.jpg
@@ -83,6 +85,10 @@ languages:
           weight: 20
           identifier: twitter
           url: https://twitter.com/matthewwhite
+        - name: 'LinkedIn'
+          weight: 10
+          identifier: linkedin
+          url: 'https://www.linkedin.com/whitematthew'
 #      links:
 #        - name: About Me
 #          weight: 10
