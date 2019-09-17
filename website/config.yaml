@@ -37,7 +37,7 @@ params:
   description: >-
     Adventures in Azure
   logoTitle: Home
-  #siteLogoImage: images/globe.svg
+  #siteLogoImage: 
   headerImage: images/blog-header.jpg
   showAuthorCard: true
   showMenuLanguages: false

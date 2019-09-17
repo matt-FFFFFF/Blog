@@ -15,6 +15,9 @@
               {{ with .Site.GetPage "taxonomyTerm" "/categories" }}
                 <li><a href="{{ .Permalink }}">{{ i18n "categories" }}</a></li>
               {{ end }}
+              {{ with .Site.GetPage "taxonomyTerm" "/series" }}
+                <li><a href="{{ .Permalink }}">{{ i18n "series" }}</a></li>
+              {{ end }}
             {{ end }}
             {{ with .Site.GetPage "home" }}
             {{ with .OutputFormats.Get "RSS" }}
@@ -62,6 +65,7 @@
               {{ .Site.Params.since }} -
             {{ end }}
             {{- $current }}
+            <img src="https://dev.azure.com/matthewwhite/mattwhite-blog/_apis/build/status/Hugo-build-deploy?branchName=master"/>
           </small>
           {{ with .Site.Params.footerHTML }}
           <small><em>{{ . | safeHTML }}</em></small>
