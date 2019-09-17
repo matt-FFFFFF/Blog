@@ -1,6 +1,7 @@
 # Build and deploy static website
 
 trigger:
+  batch: true
   branches:
     include:
     - master
