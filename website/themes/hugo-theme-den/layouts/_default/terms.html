@@ -54,6 +54,20 @@
         {{ end }}
       {{ end }}
       </dl>
+
+      {{ else if and $.Site.Taxonomies.series (eq $termName "series") }}
+      <h2><a href="{{ .Permalink }}">{{ i18n (printf "list_of_%s" .Data.Plural) }}</a></h2>
+      <dl class="row">
+      {{ range .Data.Terms.Alphabetical }}
+        {{ $name := .Name }}
+        {{ $count := len .Pages }}
+        {{ with $.Site.GetPage "taxonomy" (printf "/%s/%s" $type .Term) }}
+            <dt class="col-md-3"><span class="badge badge-secondary">{{ $count }}</span> {{ if gt $count 1 }}{{ i18n "articles_tagged" }}{{ else }}{{ i18n "article_tagged" }}{{ end }}</dt>
+            <dd class="col-md-9"><a href="{{ .Permalink }}">{{ $name }}</a></dd>
+        {{ end }}
+      {{ end }}
+      </dl>
+
     {{ end }}
     </div>
 </div>

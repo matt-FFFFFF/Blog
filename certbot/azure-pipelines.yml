@@ -20,7 +20,7 @@ variables:
   letsencryptoperation: newcert
 
 stages:
-- stage: Certificate
+- stage: build
   displayName: Certificate
   jobs:
   - job: cert
@@ -97,7 +97,7 @@ stages:
         failOnStandardError: true
 
     - task: PowerShell@2
-      displayName: Posh-ACME
+      displayName: Let's Encrypt Generate or Renew
       inputs:
         targetType: filePath
         filePath: certbot/issuecert.ps1
@@ -130,6 +130,10 @@ stages:
         azureSubscription: $(azureSubscription)
         scriptLocation: inlineScript
         inlineScript: |
+          cd `cat current-server.txt | cut -d'/' -f 3`
+          cd `cat current-account.txt`
+          cd `cat current-order.txt`
+
           KVCERTTHUMB=`az keyvault certificate show --vault-name $(keyVaultName) --name mattwhiteblog --query x509ThumbprintHex --output tsv`
           LOCALTHUMB=`openssl x509 -noout -fingerprint -sha1 -in fullchain.cer | cut -d\= -f2 | sed s/://g`
           
@@ -146,7 +150,8 @@ stages:
           
           echo "Certificate updated"
           echo "##vso[task.setvariable variable=certificateVersion;isSecret=true]$CERTID"
-        
+        workingDirectory: $(Agent.TempDirectory)/Posh-ACME
+
     - task: AzureCLI@1
       displayName: Compress & store config
       inputs:
@@ -160,7 +165,8 @@ stages:
         workingDirectory: $(Agent.TempDirectory)
       env:
         PASSPHRASE: $(symmetricKey)
-
+    
+    # TODO: Store certificate ID as artifact and move this to deploy stage
     - task: AzurePowerShell@4
       condition: and(succeeded(), eq(variables['letsEncryptEnvironment'], 'LE_PROD'), not(eq(variables['certificateVersion'],'')))
       displayName: Enable-AzFrontDoorCustomHttps

@@ -3,6 +3,7 @@ param(
     ValueFromPipeline=$true)][string]$Domain
 )
 
+Write-Output "Setting LE Server: $($Env:LE_ENV)"
 Set-PAServer $Env:LE_ENV -ErrorAction Stop
 
 # Get a new certificate or submit a renewal. Renewals not yet supported due to token expiry.
@@ -11,6 +12,7 @@ Set-PAServer $Env:LE_ENV -ErrorAction Stop
 
 switch ($Env:letsencryptoperation) {
     "renew" {
+        Write-Output "Renewing certificate"
         Submit-Renewal -PluginArgs @{
             AZSubscriptionId=$Env:AZURE_SUBSCRIPTION_ID;
             AZAccessToken=$Env:AZURE_TOKEN
@@ -19,6 +21,7 @@ switch ($Env:letsencryptoperation) {
         -Verbose
     }
     "newcert" {
+        Write-Output "Generating new certificate"
         New-PACertificate $Domain `
             -AcceptTOS `
             -Contact 'matt.white@microsoft.com' `

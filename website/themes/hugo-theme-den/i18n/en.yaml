@@ -7,6 +7,9 @@
 - id: categories
   translation: Categories
 
+- id: series
+  translation: series
+
 - id: social
   translation: Social
 
@@ -28,6 +31,9 @@
 - id: archive_of_category
   translation: Archives Listed by Category
 
+- id: archive_of_series
+  translation: Archives Listed by Series
+
 - id: archive
   translation: Archive
 
@@ -36,6 +42,9 @@
 
 - id: list_of_categories
   translation: List of Categories
+
+- id: list_of_series
+  translation: List of Series
 
 - id: more_post
   translation: More Posts
@@ -52,6 +61,8 @@
 - id: in_category
   translation: In categories
 
+- id: in_series
+  translation: In series
 
 - id: latest_posts
   translation: Latest Posts
