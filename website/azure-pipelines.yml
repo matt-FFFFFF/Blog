@@ -70,7 +70,7 @@ stages:
   dependsOn: build
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
-  - deployment: rollout-westeurope
+  - deployment: rolloutwesteurope
     environment: production
     variables:
       group: westeurope
@@ -127,7 +127,7 @@ stages:
                 ScriptArguments: -storageAccountName $(storageaccount) -resourceGroupName $(resourceGroup) -frontDoorName $(frontDoorName) -backendPoolName $(backendPoolName) -State Enabled
                 FailOnStandardError: true
 
-  - deployment: rollout-northeurope
+  - deployment: rolloutnortheurope
     environment: production
     variables:
       group: northeurope
