@@ -9,7 +9,6 @@ trigger:
     - website/*
     exclude:
     - website/azure-pipelines.yml
-    - website/azure-pipelines-deploymentjob.yml
     - website/LICENSE
     - website/.*
     - website/docker-*
@@ -30,8 +29,7 @@ stages:
     dockerVersion: 19.03.1
     containerImage: klakegg/hugo
   jobs:
-  - job: containerbuild
-    displayName: Build website using Docker container
+  - job: dockerbuild
     pool:
       vmImage: $(vmImage)
     steps:
