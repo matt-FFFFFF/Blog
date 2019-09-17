@@ -20,7 +20,7 @@
 </div>
 {{ end }}
 {{ define "main" }}
-{{- $pages := .Pages -}}
+{{- $pages := .Site.RegularPages -}}
 {{- if .IsHome -}}
   {{- $pages = where .Site.RegularPages "Type" "posts" -}}
 {{- end -}}

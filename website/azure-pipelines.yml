@@ -103,7 +103,7 @@ stages:
                 scriptPath: $(Build.SourcesDirectory)/scripts/deletebatch.azcli
                 failOnStandardError: true
               env:
-                ACCOUNT_NAME: $(storageaccount)
+                ACCOUNT_NAME: mattwhiteblog$(selector)
             - task: DownloadPipelineArtifact@2
               inputs:
                 artifactName: website
@@ -117,7 +117,7 @@ stages:
                 scriptPath: $(Build.SourcesDirectory)/scripts/uploadbatch.azcli
               env:
                 SOURCE: $(Pipeline.Workspace)/website
-                ACCOUNT_NAME: $(storageaccount)
+                ACCOUNT_NAME: mattwhiteblog$(selector)
             - task: AzurePowerShell@4
               displayName: Enable backend
               inputs:
@@ -125,7 +125,7 @@ stages:
                 ScriptType: FilePath
                 azurePowerShellVersion: LatestVersion
                 ScriptPath: $(Build.SourcesDirectory)/scripts/setfrontdoorbackend.ps1
-                ScriptArguments: -storageAccountName $(storageaccount) -resourceGroupName $(resourceGroup) -frontDoorName $(frontDoorName) -backendPoolName $(backendPoolName) -State Enabled
+                ScriptArguments: -storageAccountName mattwhiteblog$(selector) -resourceGroupName $(resourceGroup) -frontDoorName $(frontDoorName) -backendPoolName $(backendPoolName) -State Enabled
                 FailOnStandardError: true
 
 - stage: finalise
