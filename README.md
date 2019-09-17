@@ -10,4 +10,4 @@ This repo contains:
 * [ToDo] GitOps for infrastructure as code
 
 Pipeline status:
-[![Build Status](https://dev.azure.com/matthewwhite/mattwhite-blog/_apis/build/status/Hugo-build-deploy?branchName=master)](https://dev.azure.com/matthewwhite/mattwhite-blog/_build/latest?definitionId=11&branchName=master) <br/>
+[![Build Status](https://dev.azure.com/matthewwhite/mattwhite-blog/_apis/build/status/Hugo-build-deploy?branchName=master)](https://dev.azure.com/matthewwhite/mattwhite-blog/_build)

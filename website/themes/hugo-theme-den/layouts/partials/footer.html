@@ -62,10 +62,10 @@
             {{if .Site.Copyright }}{{ .Site.Copyright | safeHTML }}{{ else }}{{ .Site.Author.name | safeHTML }}{{ end }}
             {{- end }}
             {{ if and .Site.Params.since (ne .Site.Params.since $current) }}
-              {{ .Site.Params.since }} -
+              {{ .Site.Params.since }} -d
             {{ end }}
             {{- $current }}
-            <img src="https://dev.azure.com/matthewwhite/mattwhite-blog/_apis/build/status/Hugo-build-deploy?branchName=master"/>
+            <a href="https://dev.azure.com/matthewwhite/mattwhite-blog/_build" target="_blank"><img src="https://dev.azure.com/matthewwhite/mattwhite-blog/_apis/build/status/Hugo-build-deploy?branchName=master"/></a>
           </small>
           {{ with .Site.Params.footerHTML }}
           <small><em>{{ . | safeHTML }}</em></small>
