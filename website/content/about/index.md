@@ -6,10 +6,14 @@ draft: false
 index: true
 authors:
   - matt
-resources:
-  - name: header
-    src: me.jpg
-    MediaType: image/jpg
 ---
 
-I work for Microsoft as a Cloud Solution Architect.
+I work for Microsoft UK as a Cloud Solution Architect. I help customers with Azure adoption.
+
+Connect with me on the following channels:
+
+{{< fontawesome class="fab fa-github" link="https://github.com/matt-FFFFFF" text="GitHub">}} <br/>
+
+{{< fontawesome class="fab fa-linkedin" link="https://www.linkedin.com/in/whitematthew" text="LinkedIn">}} <br/>
+
+{{< fontawesome class="fab fa-twitter" link="https://twitter.com/matthewwhite" text="Twitter">}} <br/>

@@ -1,0 +1,6 @@
+{{ with .Get "link" }}<a href="{{.}}" target="_blank" style="color:black"> {{ end }}
+    <i class="{{ .Get "class" }}"></i>
+{{ if .Get "link" }}</a>{{ end }}
+{{ with .Get "link" }}<a href="{{.}}" target="_blank" class="body">{{ end }}
+    {{ with .Get "text" }} {{.}} {{ end }}
+{{ if .Get "link" }}</a>{{ end }}
