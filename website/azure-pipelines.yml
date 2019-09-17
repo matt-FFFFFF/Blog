@@ -127,7 +127,7 @@ stages:
                 ScriptArguments: -storageAccountName $(storageaccount) -resourceGroupName $(resourceGroup) -frontDoorName $(frontDoorName) -backendPoolName $(backendPoolName) -State Enabled
                 FailOnStandardError: true
 
-  - deployment: rollout-westeurope
+  - deployment: rollout-northeurope
     environment: production
     variables:
       group: northeurope
