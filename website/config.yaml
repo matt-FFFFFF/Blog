@@ -88,7 +88,7 @@ languages:
         - name: 'LinkedIn'
           weight: 10
           identifier: linkedin
-          url: 'https://www.linkedin.com/whitematthew'
+          url: 'https://www.linkedin.com/in/whitematthew'
 #      links:
 #        - name: About Me
 #          weight: 10
