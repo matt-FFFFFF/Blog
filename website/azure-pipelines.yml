@@ -73,6 +73,7 @@ stages:
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
   - deployment: rollout
+    environment: production
     pool:
       vmImage: $(vmImage)
     strategy:
