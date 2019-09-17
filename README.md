@@ -7,4 +7,4 @@ This repo contains:
 * The website content, generated using Hugo
 * Azure Pipeline for build and deployment
 * Azure Pipeline for Let's Encrypt
-* [ToDO] GitOps for infrastructure as code
+* [ToDo] GitOps for infrastructure as code
