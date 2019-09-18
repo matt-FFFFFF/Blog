@@ -36,7 +36,7 @@
         <div class="footer-title">{{ i18n "social" }}</div>
         <ul class="list-unstyled">
           {{ range .Site.Menus.social }}
-          <li><a href="{{ .URL | safeURL }}" rel="noopener" target="_blank">{{ .Name }}</a></li>
+          <li>{{ if .Pre }}{{ .Pre | safeHTML }}{{ end }}<a href="{{ .URL | safeURL }}" rel="noopener" target="_blank">{{ .Name }}</a>{{ if .Post }}{{ .Post | safeHTML }}{{ end }}</li>
           {{ end }}
         </ul>
         {{ end }}
@@ -46,7 +46,7 @@
         <div class="footer-title">{{ i18n "links" }}</div>
         <ul class="list-unstyled">
           {{ range .Site.Menus.links }}
-          <li><a href="{{ .URL | safeURL }}" rel="noopener" target="_blank">{{ .Name }}</a></li>
+          <li>{{ if .Pre }}{{ .Pre | safeHTML }}{{ end }}<a href="{{ .URL | safeURL }}" rel="noopener" target="_blank">{{ .Name }}</a>{{ if .Post }}{{ .Post | safeHTML }}{{ end }}</li>
           {{ end }}
         </ul>
         {{ end }}
@@ -65,8 +65,8 @@
               {{ .Site.Params.since }} -d
             {{ end }}
             {{- $current }}
-            <a href="https://dev.azure.com/matthewwhite/mattwhite-blog/_build" target="_blank"><img src="https://dev.azure.com/matthewwhite/mattwhite-blog/_apis/build/status/Hugo-build-deploy?branchName=master"/></a>
-          </small>
+          </small><br/>
+          <small><a href="https://dev.azure.com/matthewwhite/mattwhite-blog/_build" target="_blank"><img src="https://dev.azure.com/matthewwhite/mattwhite-blog/_apis/build/status/Hugo-build-deploy?branchName=master"/></a></small>
           {{ with .Site.Params.footerHTML }}
           <small><em>{{ . | safeHTML }}</em></small>
           {{ end }}

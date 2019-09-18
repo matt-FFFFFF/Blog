@@ -62,7 +62,7 @@
         {{ $name := .Name }}
         {{ $count := len .Pages }}
         {{ with $.Site.GetPage "taxonomy" (printf "/%s/%s" $type .Term) }}
-            <dt class="col-md-3"><span class="badge badge-secondary">{{ $count }}</span> {{ if gt $count 1 }}{{ i18n "articles_tagged" }}{{ else }}{{ i18n "article_tagged" }}{{ end }}</dt>
+            <dt class="col-md-3"><span class="badge badge-secondary">{{ $count }}</span> {{ i18n "articles_in_series" }}</dt>
             <dd class="col-md-9"><a href="{{ .Permalink }}">{{ $name }}</a></dd>
         {{ end }}
       {{ end }}

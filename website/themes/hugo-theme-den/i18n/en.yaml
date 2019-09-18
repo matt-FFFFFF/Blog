@@ -52,6 +52,9 @@
 - id: articles_tagged
   translation: articles tagged
 
+- id: articles_in_series
+  translation: in series
+
 - id: article_tagged
   translation: article tagged
 

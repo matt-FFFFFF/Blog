@@ -36,7 +36,7 @@ I thought I would do something different...
 
 ## My needs
 
-* I wanted content to be <a href="https://github.com/matt-FFFFFF/blog" target="_blank">open source</a>
+* I wanted content to be {{< atgtblank "https://github.com/matt-FFFFFF/blog" "open source" >}}
 * I needed to do local development that would produce identical output to the deployed website
 * I wanted to automate deployments
 * I wanted to make the website highly available globally
@@ -47,11 +47,11 @@ I thought I would do something different...
 {.table}
 | Thing | Technology | Rationale
 | ---- | ---------- | ---
-| Web content | <a href="https://gohugo.io/" target="_blank">Hugo</a> | Uses <a href="https://golang.org/" target="_blank">golang</a>, another interest of mine
-| Web hosting | <a href="https://docs.microsoft.com/en-us/azure/storage/blobs/storage-blob-static-website" target="_blank">Azure Storage</a> | Inexpensive
-| Global load balancing & TLS | <a href="https://azure.microsoft.com/en-gb/services/frontdoor/" target="_blank">Azure Front Door | TLS bridging, HTTP->HTTPS redirection, custom domains 
-| Local development | <a href="https://docs.microsoft.com/en-us/windows/wsl/wsl2-install" target="_blank">WSL 2</a>, <a href="https://www.docker.com/" target="_blank">Docker</a>, <a href="https://code.visualstudio.com/" target="_blank">VS Code</a> & <a href="https://devblogs.microsoft.com/commandline/introducing-windows-terminal/" target="_blank">Windows Terminal | Fast & efficient workflow
-| CI/CD | <a href="https://azure.microsoft.com/en-gb/services/devops/" target="_blank">Azure DevOps</a> | Desire to learn about the new YAML pipelines
+| Web content | {{< atgtblank "https://gohugo.io/" Hugo >}} | Uses {{< atgtblank "https://golang.org/" golang >}}, another interest of mine
+| Web hosting | {{< atgtblank "https://docs.microsoft.com/en-us/azure/storage/blobs/storage-blob-static-website" "Azure Storage" >}} | Inexpensive & reliable
+| Global load balancing & TLS | {{< atgtblank "https://azure.microsoft.com/en-gb/services/frontdoor/" "Azure Front Door" >}} | TLS bridging, HTTP->HTTPS redirection, custom domains
+| Local development | {{< atgtblank "https://docs.microsoft.com/en-us/windows/wsl/wsl2-install" "WSL 2" >}}, {{< atgtblank "https://www.docker.com/" Docker >}}, {{< atgtblank "https://code.visualstudio.com/" "VS Code" >}} & {{< atgtblank "https://devblogs.microsoft.com/commandline/introducing-windows-terminal/" "Windows Terminal" >}} | Fast & efficient workflow
+| CI/CD | {{< atgtblank "https://azure.microsoft.com/en-gb/services/devops/" "Azure DevOps" >}} | Desire to learn the new YAML pipelines
 
 ## Next...
 

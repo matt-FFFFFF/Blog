@@ -1,6 +1,4 @@
-{{ with .Get "link" }}<a href="{{.}}" target="_blank" style="color:black"> {{ end }}
-    <i class="{{ .Get "class" }}"></i>
+{{ with .Get "link" }}<a href="{{.}}" target="_blank" style="text-decoration:none">{{ end }}
+    <i class="{{ .Get "class" }}" {{ if .Get "iconstyle" }}style="{{ .Get "iconstyle" }}" {{ end }} ></i>
 {{ if .Get "link" }}</a>{{ end }}
-{{ with .Get "link" }}<a href="{{.}}" target="_blank" class="body">{{ end }}
-    {{ with .Get "text" }} {{.}} {{ end }}
-{{ if .Get "link" }}</a>{{ end }}
+{{ if .Get "text" }}<a href="{{ .Get "link" }}" target="_blank">{{ .Get "text" }}</a>{{ end }}

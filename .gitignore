@@ -1,8 +1,3 @@
-# Hugo default output directory
-/website/build
-/website/resources/_gen/*
-/website/resources
-
 ## OS Files
 # Windows
 Thumbs.db

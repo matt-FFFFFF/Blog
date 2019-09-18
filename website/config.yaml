@@ -27,7 +27,7 @@ sitemap:
   filename: sitemap.xml
 params:
   since: '2019'
-  rssFullContent: true
+  rssFullContent: false
   keywords:
     - Azure
     - blog
@@ -80,17 +80,41 @@ languages:
         - name: GitHub
           weight: 10
           identifier: github
-          url: 'https://github.com/matt-FFFFFF/'
+          url: 'https://github.com/matt-FFFFFF'
+          pre: '<a href="https://github.com/matt-FFFFFF" target="_blank"><i class="fab fa-github"></i></a>&nbsp'
         - name: 'Twitter'
           weight: 20
           identifier: twitter
           url: https://twitter.com/matthewwhite
+          pre: '<a href="https://twitter.com/matthewwhite" target="_blank"><i class="fab fa-twitter"></i></a>&nbsp'
         - name: 'LinkedIn'
           weight: 10
           identifier: linkedin
           url: 'https://www.linkedin.com/in/whitematthew'
-#      links:
-#        - name: About Me
-#          weight: 10
-#          identifier: about_me
-#          url: /about
+          pre: '<a href="https://www.linkedin.com/in/whitematthew" target="_blank"><i class="fab fa-linkedin"></i></a>&nbsp'
+privacy:
+  disqus:
+    disable: false
+  googleAnalytics:
+    anonymizeIP: true
+    disable: false
+    respectDoNotTrack: false
+    useSessionStorage: false
+  instagram:
+    disable: false
+    simple: true
+  twitter:
+    disable: false
+    enableDNT: true
+    simple: true
+  vimeo:
+    disable: false
+    simple: false
+  youtube:
+    disable: false
+    privacyEnhanced: true
+services:
+  instagram:
+    disableInlineCSS: true
+  twitter:
+    disableInlineCSS: true

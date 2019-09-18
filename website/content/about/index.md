@@ -15,8 +15,8 @@ If you see anything that's not right, please open a PR or an issue.
 
 Connect with me on the following channels:
 
-{{< fontawesome class="fab fa-github" link="https://github.com/matt-FFFFFF" text="GitHub">}} <br/>
+{{< fontawesome class="fab fa-github" link="https://github.com/matt-FFFFFF" iconstyle="color:black" text="GitHub" >}} <br/>
 
-{{< fontawesome class="fab fa-linkedin" link="https://www.linkedin.com/in/whitematthew" text="LinkedIn">}} <br/>
+{{< fontawesome class="fab fa-linkedin" link="https://www.linkedin.com/in/whitematthew" iconstyle="color:black" text="LinkedIn">}} <br/>
 
-{{< fontawesome class="fab fa-twitter" link="https://twitter.com/matthewwhite" text="Twitter">}} <br/>
+{{< fontawesome class="fab fa-twitter" link="https://twitter.com/matthewwhite" iconstyle="color:black" text="Twitter">}} <br/>
