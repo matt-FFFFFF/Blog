@@ -10,15 +10,19 @@ Set-PAServer $Env:LE_ENV -ErrorAction Stop
 # To implement renewals, wil lneed to modify token inside plugindata.xml
 # PR approved for Posh-ACME, awaiting new version to implement renewal
 
-switch ($Env:letsencryptoperation) {
+Write-Output "Attempting Operation: $($Env:LE_OPERATION)"
+
+switch ($Env:LE_OPERATION) {
     "renew" {
         Write-Output "Renewing certificate"
-        Submit-Renewal -PluginArgs @{
-            AZSubscriptionId=$Env:AZURE_SUBSCRIPTION_ID;
-            AZAccessToken=$Env:AZURE_TOKEN
-        } `
-        -NewKey `
-        -Verbose
+        Submit-Renewal `
+            -NewKey 
+            -PluginArgs @{
+                AZSubscriptionId=$Env:AZURE_SUBSCRIPTION_ID;
+                AZAccessToken=$Env:AZURE_TOKEN
+            } `
+            -Verbose;
+        break
     }
     "newcert" {
         Write-Output "Generating new certificate"
@@ -30,8 +34,10 @@ switch ($Env:letsencryptoperation) {
                 AZSubscriptionId=$Env:AZURE_SUBSCRIPTION_ID;
                 AZAccessToken=$Env:AZURE_TOKEN
             } `
-            -Verbose
-                    
-        Get-PACertificate -MainDomain $Domain
+            -Verbose;
+        break
+    }
+    default {
+        Write-Output "No Let's Encrypt operation performed"
     }
 }

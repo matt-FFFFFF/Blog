@@ -16,8 +16,6 @@ variables:
   letsEncryptEnvironment: LE_STAGE
   symmetricKeyName: leconfigsecretwrapped
   blobcontainer: configprod
-  # Below should be renew or newcert
-  letsencryptoperation: newcert
 
 stages:
 - stage: build
@@ -68,6 +66,7 @@ stages:
           EXISTS=`az storage blob exists --name acme.tar.gz.gpg --container $(blobcontainer) --account-name $(leconfigstorageaccount) --query exists --output tsv`
           if [ "$EXISTS" == "false" ]; then
             echo "WARNING: ACME config backup not found. Creating..."
+            echo "##vso[task.setvariable variable=letsencryptoperation]newcert"
             mkdir -v Posh-ACME
             exit 0
           fi
@@ -75,7 +74,7 @@ stages:
           gpg --passphrase $PASSPHRASE --decrypt acme.tar.gz.gpg >acme.tar.gz
           tar xvzf acme.tar.gz
           rm -v acme.tar.gz acme.tar.gz.gpg
-          echo "##vso[task.setvariable variable=letsencryptoperation;issecret=true]renew"
+          echo "##vso[task.setvariable variable=letsencryptoperation]renew"
         azureSubscription: $(AzureSubscription)
         workingDirectory: $(Agent.TempDirectory)
       env:
@@ -108,6 +107,7 @@ stages:
         POSHACME_HOME: $(Agent.TempDirectory)/Posh-ACME
         AZURE_TOKEN: $(azureToken)
         LE_ENV: $(letsEncryptEnvironment)
+        LE_OPERATION: $(letsEncryptOperation)
         AZURE_SUBSCRIPTION_ID: $(azureSubscriptionId)
 
     - task: CmdLine@2
