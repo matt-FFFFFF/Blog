@@ -11,7 +11,7 @@ paginatePath: page
 PygmentsCodeFences: true
 PygmentsUseClasses: true
 disqusShortname: mattwhiteblog
-googleAnalytics: 'UA-148159929-1'
+googleAnalytics:
 defaultContentLanguage: en
 defaultContentLanguageInSubdir: false
 permalinks:
@@ -26,6 +26,7 @@ sitemap:
   priority: 0.5
   filename: sitemap.xml
 params:
+  azureApplicationInsightsKey: 031a7456-683d-4570-9774-7c81cb700ca0
   since: '2019'
   rssFullContent: false
   keywords:
@@ -43,7 +44,7 @@ params:
   showMenuLanguages: false
   autoLoadComments: false
   dateFormatToUse: '2006-01-02'
-  google_verification: ''
+  google_verification:
   customCSS: []
   customJS: []
 taxonomies:

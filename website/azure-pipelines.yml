@@ -192,6 +192,7 @@ stages:
     pool:
       vmImage: $(vmImage)
     steps:
+    - checkout: none
     - task: AzureCLI@1
       displayName: Purge cache
       inputs:
