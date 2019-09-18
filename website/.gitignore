@@ -1,3 +1,4 @@
 # Hugo output directories
 build/*
 resources/*
+**/*:Zone.Identifier

@@ -4,8 +4,8 @@ For more info, see [my blog](https://mattwhite.blog/)
 
 This repo contains:
 
-* The website content, generated using Hugo
-* Azure Pipeline for build and deployment
+* The website content, generated using Hugo [here](website/)
+* Azure Pipeline for build and deployment [/website/azure-pipelines.yml](/website/azure-pipelines.yml)
 * Azure Pipeline for Let's Encrypt
 * [ToDo] GitOps for infrastructure as code
 

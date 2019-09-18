@@ -6,7 +6,7 @@ enableRobotsTXT: true
 hasCJKLanguage: false
 preserveTaxonomyNames: true
 rssLimit: 20
-paginate: 20
+paginate: 10
 paginatePath: page
 PygmentsCodeFences: true
 PygmentsUseClasses: true
