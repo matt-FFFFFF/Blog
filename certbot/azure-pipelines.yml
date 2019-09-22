@@ -137,6 +137,9 @@ stages:
           KVCERTTHUMB=`az keyvault certificate show --vault-name $(keyVaultName) --name mattwhiteblog --query x509ThumbprintHex --output tsv`
           LOCALTHUMB=`openssl x509 -noout -fingerprint -sha1 -in fullchain.cer | cut -d\= -f2 | sed s/://g`
           
+          echo "Key Vault Certificate Thumb: $KVTHUMB"
+          echo "Local Certificate Thumb:     $LOCALTHUMB"
+
           if [ "$KVTHUMB" == "$LOCALTHUMB" ]; then
             echo "Certificate not different - will not import to Key Vault"
             exit 0
@@ -146,7 +149,7 @@ stages:
                                         --name mattwhiteblog \
                                         --file $(Agent.TempDirectory)/cert-nopasswd.pfx`
           
-          CERTID=`$CERT | jq -r .id | cut -d/ -f6`
+          CERTID=`echo $CERT | jq -r .id | cut -d/ -f6`
           
           echo "Certificate updated"
           echo "##vso[task.setvariable variable=certificateVersion;isSecret=true]$CERTID"
