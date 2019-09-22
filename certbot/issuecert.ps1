@@ -16,7 +16,7 @@ switch ($Env:LE_OPERATION) {
     "renew" {
         Write-Output "Renewing certificate"
         Submit-Renewal `
-            -NewKey 
+            -NewKey `
             -PluginArgs @{
                 AZSubscriptionId=$Env:AZURE_SUBSCRIPTION_ID;
                 AZAccessToken=$Env:AZURE_TOKEN

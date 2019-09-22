@@ -15,16 +15,16 @@
           {{ end }} /
         {{ end }}
         {{ .Date.Format (.Site.Params.dateFormatToUse | default "Mon 02 January 2006") -}}
-          {{ with .Params.categories -}}
-          {{ $.Scratch.Set "firstcategory" true }}
-          / {{ i18n "in_category" }}
+          {{ with .Params.series -}}
+          {{ $.Scratch.Set "firstseries" true }}
+          / {{ i18n "in_series" }}
           {{ range . -}}
           {{- $name := . -}}
-          {{- with $.Site.GetPage "taxonomy" (printf "/categories/%s" $name) | default ($.Site.GetPage "taxonomy" (printf "/categories/%s" ($name | urlize))) -}}
-            {{- if not ($.Scratch.Get "firstcategory") -}}
+          {{- with $.Site.GetPage "taxonomy" (printf "/series/%s" $name) | default ($.Site.GetPage "taxonomy" (printf "/series/%s" ($name | urlize))) -}}
+            {{- if not ($.Scratch.Get "firstseries") -}}
             , 
             {{ else -}}
-            {{- $.Scratch.Set "firstcategory" false -}}
+            {{- $.Scratch.Set "firstseries" false -}}
             {{- end -}}
             <a href="{{ .Permalink }}">{{ $name }}</a>
           {{- end -}}
@@ -35,7 +35,7 @@
         {{ with .Params.tags -}}
           {{ $.Scratch.Set "firsttag" true }}
           <div class="clearfix"></div>
-          <p class="float-right header-tags">
+          <p class="float-left header-tags">
               <i class="fas fa-tags" aria-hidden="true"></i>
               {{ range (. | sort) -}}
               {{- $name := . -}}
@@ -44,6 +44,23 @@
                 , 
                 {{ else -}}
                 {{- $.Scratch.Set "firsttag" false -}}
+                {{- end -}}
+                <a href="{{ .Permalink }}">{{ $name }}</a>
+              {{- end -}}
+              {{ end }}
+          </p>
+          {{ end }}
+          <p class="float-right header-tags">
+          {{ with .Params.categories -}}
+            {{ $.Scratch.Set "firstcategory" true }}
+            {{ i18n "categories" }}:
+              {{ range (. | sort) -}}
+              {{- $name := . -}}
+              {{- with $.Site.GetPage "taxonomy" (printf "/categories/%s" $name) | default ($.Site.GetPage "taxonomy" (printf "/categories/%s" ($name | urlize))) -}}
+                {{- if not ($.Scratch.Get "firstcategory") -}}
+                , 
+                {{ else -}}
+                {{- $.Scratch.Set "firstcategory" false -}}
                 {{- end -}}
                 <a href="{{ .Permalink }}">{{ $name }}</a>
               {{- end -}}
