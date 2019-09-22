@@ -134,7 +134,7 @@ stages:
           cd `cat current-account.txt`
           cd `cat current-order.txt`
 
-          KVCERTTHUMB=`az keyvault certificate show --vault-name $(keyVaultName) --name mattwhiteblog --query x509ThumbprintHex --output tsv`
+          KVTHUMB=`az keyvault certificate show --vault-name $(keyVaultName) --name mattwhiteblog --query x509ThumbprintHex --output tsv`
           LOCALTHUMB=`openssl x509 -noout -fingerprint -sha1 -in fullchain.cer | cut -d\= -f2 | sed s/://g`
           
           echo "Key Vault Certificate Thumb: $KVTHUMB"
