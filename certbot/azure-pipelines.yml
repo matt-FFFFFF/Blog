@@ -125,6 +125,7 @@ stages:
 
     - task: AzureCLI@1
       name: certstorekv
+      condition: and(succeeded(), eq(variables['letsEncryptEnvironment'], 'LE_PROD'))
       displayName: Store certificate in Key Vault
       inputs:
         azureSubscription: $(azureSubscription)
@@ -141,7 +142,7 @@ stages:
           echo "Local Certificate Thumb:     $LOCALTHUMB"
 
           if [ "$KVTHUMB" == "$LOCALTHUMB" ]; then
-            echo "Certificate not different - will not import to Key Vault"
+            echo "Certificates are identical - will not import to Key Vault"
             exit 0
           fi
 
