@@ -180,4 +180,4 @@ stages:
         ScriptType: InlineScript
         Inline: |
           $vaultId = (Get-AzKeyVault -VaultName $(keyVaultName)).ResourceId
-          Enable-AzFrontDoorCustomHttps -ResourceGroupName blog -FrontDoorName mattwhiteblog -VaultId $vaultId -SecretName mattwhiteblog -SecretVersion $(certificateVersion)
+          Enable-AzFrontDoorCustomDomainHttps -ResourceGroupName blog -FrontDoorName mattwhiteblog -VaultId $vaultId -SecretName mattwhiteblog -SecretVersion $(certificateVersion) -FrontendEndpointName mattwhite-blog
