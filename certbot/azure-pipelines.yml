@@ -15,7 +15,7 @@ variables:
   azureSubscription: mattwhiteazuresub
   letsEncryptEnvironment: LE_STAGE
   symmetricKeyName: leconfigsecretwrapped
-  blobcontainer: configprod
+  blobcontainer: stage
 
 stages:
 - stage: build
