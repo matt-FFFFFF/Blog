@@ -13,9 +13,9 @@ schedules:
 variables:
   skipComponentGovernanceDetection: true
   azureSubscription: mattwhiteazuresub
-  letsEncryptEnvironment: LE_STAGE
+  letsEncryptEnvironment: LE_PROD
   symmetricKeyName: leconfigsecretwrapped
-  blobcontainer: stage
+  blobcontainer: prod
 
 stages:
 - stage: build
