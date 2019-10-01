@@ -23,11 +23,12 @@ variables:
   group: tfproduction
   terraform-version: '0.12.9'
   terraform-sha256: '69712c6216cc09b7eca514b9fb137d4b1fead76559c66f338b4185e1c347ace5'
-  tflint-version: '0.10.3'
-  tflint-sha256: 'db2ac464e1c626ab3a4ac6b5693582ddccb0bdab02ab25bb5db467d5998ca9bf'
+  tflint-version: '0.12.0'
+  tflint-sha256: '2a9145adff49d4807b0fbff10b6d7c1c2fc4c2342a1fa02908171cbbabd966f2'
   keyvault: tfsecrets-mawhi
   azureSubscription: mattwhiteazuresub
   TF_IN_AUTOMATION: 1
+  skipComponentGovernanceDetection: true
 
 stages:
 - stage: plan
@@ -203,7 +204,7 @@ stages:
 
           - script: find . -not -iname *.json -type f | xargs chmod ug+x
             displayName: Set exec bit on plugins
-            workingDirectory: $(Agent.WorkFolder)/tfroot/tf/.terraform/plugins
+            workingDirectory: $(Agent.WorkFolder)/tfroot/.terraform/plugins
 
           - script: $(Agent.WorkFolder)/terraform apply -no-color -input=false -auto-approve 'tfplan'
             displayName: Terraform apply
