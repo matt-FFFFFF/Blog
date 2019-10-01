@@ -54,7 +54,7 @@ resource "azurerm_key_vault_certificate" "letsencrypt" {
   key_vault_id = "${azurerm_key_vault.kv.id}"
 
   certificate {
-    contents = "${acme_certificate.certificate.certificate_p12}"
+    contents = "${acme_certificate.certificate[0].certificate_p12}"
   }
 
   certificate_policy {
