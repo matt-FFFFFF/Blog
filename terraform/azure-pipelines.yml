@@ -20,8 +20,8 @@ pr:
     - tf/*
 
 variables:
-  terraform-version: '0.12.8'
-  terraform-sha256: '43806e68f7af396449dd4577c6e5cb63c6dc4a253ae233e1dddc46cf423d808b'
+  terraform-version: '0.12.9'
+  terraform-sha256: '69712c6216cc09b7eca514b9fb137d4b1fead76559c66f338b4185e1c347ace5'
   tflint-version: '0.10.3'
   tflint-sha256: 'db2ac464e1c626ab3a4ac6b5693582ddccb0bdab02ab25bb5db467d5998ca9bf'
   keyvault: tfsecrets-mawhi
