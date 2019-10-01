@@ -20,6 +20,7 @@ pr:
     - terraform/tf/*
 
 variables:
+  group: tfbackend
   terraform-version: '0.12.9'
   terraform-sha256: '69712c6216cc09b7eca514b9fb137d4b1fead76559c66f338b4185e1c347ace5'
   tflint-version: '0.10.3'
@@ -34,8 +35,6 @@ stages:
   jobs:
   - job: planjob
     displayName: Terraform plan job
-    variables:
-      group: tfbackend
     pool:
       vmImage: 'ubuntu-latest'
     steps:
