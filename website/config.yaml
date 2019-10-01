@@ -11,12 +11,13 @@ paginatePath: page
 PygmentsCodeFences: true
 PygmentsUseClasses: true
 disqusShortname: mattwhiteblog
-googleAnalytics:
+#googleAnalytics:
 defaultContentLanguage: en
 defaultContentLanguageInSubdir: false
 permalinks:
   posts: '/:year/:month/:slug/'
   categories: '/category/:slug/'
+  series: '/series/:slug/'
   tags: '/tag/:slug/'
   pages: '/:slug/'
 author:
@@ -55,15 +56,16 @@ taxonomies:
 related:
   threshold: 50
   includeNewer: true
-  toLower: false
+  toLower: true
+  
   indices:
-    - name: categories
+    - name: series
       weight: 200
-    - name: keywords
+    - name: categories
       weight: 150
     - name: tags
       weight: 100
-    - name: series
+    - name: keywords
       weight: 75
 languages:
   en:

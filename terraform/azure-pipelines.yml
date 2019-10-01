@@ -1,0 +1,195 @@
+# Azure DevOps Pipeline to perform a terraform init & terraform plan
+# Matt White @ Microsoft https://github.com/matt-FFFFFF
+
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - tf/*
+
+pr:
+  autoCancel: true
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - tf/*
+
+variables:
+  terraform-version: '0.12.8'
+  terraform-sha256: '43806e68f7af396449dd4577c6e5cb63c6dc4a253ae233e1dddc46cf423d808b'
+  tflint-version: '0.10.3'
+  tflint-sha256: 'db2ac464e1c626ab3a4ac6b5693582ddccb0bdab02ab25bb5db467d5998ca9bf'
+  keyvault: tfsecrets-mawhi
+  azureSubscription: mawhiterraform
+  TF_IN_AUTOMATION: 1
+
+stages:
+- stage: plan
+  displayName: Terraform plan
+  jobs:
+  - job: planjob
+    displayName: Terraform plan job
+    variables:
+      group: tfbackend
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - script: |
+        curl https://releases.hashicorp.com/terraform/$(terraform-version)/terraform_$(terraform-version)_linux_amd64.zip --output $(Agent.WorkFolder)/terraform.zip
+      workingDirectory: $(Agent.WorkFolder)
+      displayName: Download Terraform
+
+    - script: echo "$(terraform-sha256) terraform.zip" > sha256sums-terraform.txt
+      displayName: Create Terraform SHA256 sums file
+      workingDirectory: $(Agent.WorkFolder)
+
+    - script: sha256sum --check --status sha256sums-terraform.txt
+      displayName: Verify terraform binary SHA256 checksum
+      workingDirectory: $(Agent.WorkFolder)
+
+    - script: |
+        unzip ./terraform.zip
+        chmod a+x ./terraform
+        if [ "Terraform v$(terraform-version)" != "`./terraform -v | head -n1`" ]; then exit 1; fi      
+      displayName: Extract Terraform binary
+      workingDirectory: $(Agent.WorkFolder)
+
+    - script: curl --location https://github.com/wata727/tflint/releases/download/v$(tflint-version)/tflint_linux_amd64.zip --output $(Agent.WorkFolder)/tflint.zip
+      displayName: Download tflint
+      workingDirectory: $(Agent.WorkFolder)
+    
+    - script: echo "$(tflint-sha256) tflint.zip" > sha256sums-tflint.txt
+      displayName: Create tflint SHA256 sums file
+      workingDirectory: $(Agent.WorkFolder)
+
+    - script: sha256sum --check --status sha256sums-tflint.txt
+      displayName: Verify tflint binary SHA256 checksum
+      workingDirectory: $(Agent.WorkFolder)
+
+    - script: |
+        unzip ./tflint.zip
+        chmod a+x ./tflint
+        if [ "TFLint version $(tflint-version)" != "`./tflint -v | head -n1`" ]; then exit 1; fi      
+      displayName: Extract tflint binary
+      workingDirectory: $(Agent.WorkFolder)
+
+    - script: mkdir $(Build.ArtifactStagingDirectory)/tfroot
+      displayName: "Create 'tfroot' directory"
+
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: $(Build.SourcesDirectory)/terraform/tf
+        TargetFolder: $(Build.ArtifactStagingDirectory)/tfroot
+        Contents: |
+          **/*
+          !.git/**/*
+      displayName: Copy files to staging directory (excluding .git)
+
+    - task: CmdLine@2
+      displayName: Terraform init
+      inputs:
+        script: |
+          $(Agent.WorkFolder)/terraform init -no-color -input=false \
+            -backend-config="container_name=$CONTAINER_NAME" \
+            -backend-config="key=$KEY" \
+            -backend-config="storage_account_name=$STORAGE_ACCOUNT_NAME" \
+            -backend-config="environment=$ENVIRONMENT" \
+            -backend-config="resource_group_name=$RESOURCE_GROUP_NAME"
+        workingDirectory: $(Build.ArtifactStagingDirectory)/tfroot/tf-files
+      env:
+        CONTAINER_NAME: $(terraform-backend-container-name)
+        KEY: $(terraform-backend-key)
+        STORAGE_ACCOUNT_NAME: $(terraform-backend-storage-account-name)
+        ENVIRONMENT: $(terraform-backend-environment)
+        ARM_SUBSCRIPTION_ID: $(azurerm-subscription-id)
+        ARM_CLIENT_ID: $(azurerm-client-id)
+        ARM_TENANT_ID: $(azurerm-tenant-id)
+        ARM_CLIENT_SECRET: $(azurerm-client-secret)
+        RESOURCE_GROUP_NAME: $(terraform-backend-resource-group-name)
+
+    - script: $(Agent.WorkFolder)/terraform validate
+      displayName: Terraform validate
+      workingDirectory: $(Build.ArtifactStagingDirectory)/tfroot/tf-files
+
+    - script: $(Agent.WorkFolder)/terraform fmt -check
+      displayName: Terraform fmt check
+      workingDirectory: $(Build.ArtifactStagingDirectory)/tfroot/tf-files
+
+    - script: $(Agent.WorkFolder)/tflint
+      displayName: TFlint
+      workingDirectory: $(Build.ArtifactStagingDirectory)/tfroot/tf-files
+
+    - script: $(Agent.WorkFolder)/terraform plan -no-color -input=false -out='tfplan'
+      displayName: Terraform plan
+      workingDirectory: $(Build.ArtifactStagingDirectory)/tfroot/tf-files
+      env:
+        ARM_SUBSCRIPTION_ID: $(azurerm-subscription-id)
+        ARM_CLIENT_ID: $(azurerm-client-id)
+        ARM_TENANT_ID: $(azurerm-tenant-id)
+        ARM_CLIENT_SECRET: $(azurerm-client-secret)
+
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: $(Build.ArtifactStagingDirectory)/tfroot
+        ArtifactName: tfplan
+      displayName: Publish plan
+      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+
+- stage: apply
+  displayName: Terraform apply
+  dependsOn: plan
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  jobs:
+  - deployment: applyjob
+    pool:
+      vmImage: 'ubuntu-latest'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - script: |
+              curl https://releases.hashicorp.com/terraform/$(terraform-version)/terraform_$(terraform-version)_linux_amd64.zip --output $(Agent.WorkFolder)/terraform.zip
+            workingDirectory: $(Agent.WorkFolder)
+            displayName: Download Terraform
+
+          - script: echo "$(terraform-sha256) terraform.zip" > sha256sums.txt
+            displayName: Create Terraform SHA256 sums file
+            workingDirectory: $(Agent.WorkFolder)
+
+          - script: sha256sum --check --status sha256sums.txt
+            displayName: Verify terraform binary SHA256 checksum
+            workingDirectory: $(Agent.WorkFolder)
+
+          - script: |
+              unzip ./terraform.zip
+              chmod a+x ./terraform
+              if [ "Terraform v$(terraform-version)" != "`./terraform -v | head -n1`" ]; then exit 1; fi      
+            displayName: Extract Terraform binary
+            workingDirectory: $(Agent.WorkFolder)
+
+          - script: mkdir $(Agent.WorkFolder)/tfroot
+            displayName: "Create 'tfroot' directory"
+
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              targetPath: $(Agent.WorkFolder)/tfroot
+              ArtifactName: tfplan
+            displayName: Download plan
+
+          - script: find . -not -iname *.json -type f | xargs chmod ug+x
+            displayName: Set exec bit on plugins
+            workingDirectory: $(Agent.WorkFolder)/tfroot/tf/.terraform/plugins
+
+          - script: $(Agent.WorkFolder)/terraform apply -no-color -input=false -auto-approve 'tfplan'
+            displayName: Terraform apply
+            workingDirectory: $(Agent.WorkFolder)/tfroot/tf
+            env:
+              ARM_SUBSCRIPTION_ID: $(azurerm-subscription-id)
+              ARM_CLIENT_ID: $(azurerm-client-id)
+              ARM_TENANT_ID: $(azurerm-tenant-id)
+              ARM_CLIENT_SECRET: $(azurerm-client-secret)
