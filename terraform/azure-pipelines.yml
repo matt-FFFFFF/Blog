@@ -213,6 +213,16 @@ stages:
             displayName: Set exec bit on plugins
             workingDirectory: $(Agent.WorkFolder)/tfroot/.terraform/plugins
 
+          - script: |
+              az login --service-principal --username $ARM_CLIENT_ID --tenant $ARM_TENANT_ID --password $ARM_CLIENT_SECRET
+              az account set --subscription $ARM_SUBSCRIPTION_ID
+            displayName: az login
+            env:
+              ARM_SUBSCRIPTION_ID: $(azurerm-subscription-id)
+              ARM_CLIENT_ID: $(azurerm-client-id)
+              ARM_TENANT_ID: $(azurerm-tenant-id)
+              ARM_CLIENT_SECRET: $(azurerm-client-secret)
+
           - script: $(Agent.WorkFolder)/terraform apply -no-color -input=false -auto-approve 'tfplan'
             displayName: Terraform apply
             workingDirectory: $(Agent.WorkFolder)/tfroot
@@ -221,3 +231,7 @@ stages:
               ARM_CLIENT_ID: $(azurerm-client-id)
               ARM_TENANT_ID: $(azurerm-tenant-id)
               ARM_CLIENT_SECRET: $(azurerm-client-secret)
+          
+          - script: az account clear
+            displayName: az account clear
+            condition: true
