@@ -78,8 +78,8 @@ resource "azurerm_frontdoor" "blog" {
 
       custom_https_configuration {
         certificate_source                         = "AzureKeyVault"
-        azure_key_vault_certificate_secret_name    = "${azurerm_keyvault_certificate.letsencrypt[0].name}"
-        azure_key_vault_certificate_secret_version = "${azurerm_keyvault_certificate.letsencrypt[0].version}"
+        azure_key_vault_certificate_secret_name    = "${azurerm_key_vault_certificate.letsencrypt[0].name}"
+        azure_key_vault_certificate_secret_version = "${azurerm_key_vault_certificate.letsencrypt[0].version}"
         azure_key_vault_certificate_vault_id       = "${azurerm_key_vault.kv.id}"
       }
 
