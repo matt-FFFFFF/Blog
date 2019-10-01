@@ -100,7 +100,7 @@ stages:
             -backend-config="storage_account_name=$STORAGE_ACCOUNT_NAME" \
             -backend-config="environment=$ENVIRONMENT" \
             -backend-config="resource_group_name=$RESOURCE_GROUP_NAME"
-        workingDirectory: $(Build.ArtifactStagingDirectory)/tfroot/tf-files
+        workingDirectory: $(Build.ArtifactStagingDirectory)/tfroot
       env:
         CONTAINER_NAME: $(terraform-backend-container-name)
         KEY: $(terraform-backend-key)
@@ -114,19 +114,19 @@ stages:
 
     - script: $(Agent.WorkFolder)/terraform validate
       displayName: Terraform validate
-      workingDirectory: $(Build.ArtifactStagingDirectory)/tfroot/tf-files
+      workingDirectory: $(Build.ArtifactStagingDirectory)/tfroot
 
     - script: $(Agent.WorkFolder)/terraform fmt -check
       displayName: Terraform fmt check
-      workingDirectory: $(Build.ArtifactStagingDirectory)/tfroot/tf-files
+      workingDirectory: $(Build.ArtifactStagingDirectory)/tfroot
 
     - script: $(Agent.WorkFolder)/tflint
       displayName: TFlint
-      workingDirectory: $(Build.ArtifactStagingDirectory)/tfroot/tf-files
+      workingDirectory: $(Build.ArtifactStagingDirectory)/tfroot
 
     - script: $(Agent.WorkFolder)/terraform plan -no-color -input=false -out='tfplan'
       displayName: Terraform plan
-      workingDirectory: $(Build.ArtifactStagingDirectory)/tfroot/tf-files
+      workingDirectory: $(Build.ArtifactStagingDirectory)/tfroot
       env:
         ARM_SUBSCRIPTION_ID: $(azurerm-subscription-id)
         ARM_CLIENT_ID: $(azurerm-client-id)
@@ -188,7 +188,7 @@ stages:
 
           - script: $(Agent.WorkFolder)/terraform apply -no-color -input=false -auto-approve 'tfplan'
             displayName: Terraform apply
-            workingDirectory: $(Agent.WorkFolder)/tfroot/tf
+            workingDirectory: $(Agent.WorkFolder)/tfroot
             env:
               ARM_SUBSCRIPTION_ID: $(azurerm-subscription-id)
               ARM_CLIENT_ID: $(azurerm-client-id)
