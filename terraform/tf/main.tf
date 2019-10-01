@@ -29,8 +29,11 @@ provider "tls" {
   version = "~>2.1"
 }
 
-data "azuread_service_principal" "afd" {
-  application_id = "ad0e1c7e-6d38-4ba4-9efd-0bc77ba9f037"
+# Hard coded here due to service principals not having graphapi access to read all objects
+# Otherwise could look up applicaiton_id as described here:
+# https://docs.microsoft.com/en-us/azure/frontdoor/front-door-custom-domain-https
+locals {
+  afd_object_id = "21bf1420-2ed9-48b9-bf6d-ece1337d4fd1"
 }
 
 # Included as azurerm_client_config does not return correct data for users

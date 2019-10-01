@@ -35,9 +35,9 @@ resource "azurerm_key_vault_access_policy" "pipeline" {
 
 # This is the Azure Front Door object ID. It needs access to retrieve the certificates/secrets.
 resource "azurerm_key_vault_access_policy" "afd" {
-  key_vault_id = azurerm_key_vault.kv.id
-  tenant_id    = data.azurerm_client_config.current.tenant_id
-  object_id    = data.azuread_service_principal.afd.object_id
+  key_vault_id = "${azurerm_key_vault.kv.id}"
+  tenant_id    = "${data.azurerm_client_config.current.tenant_id}"
+  object_id    = "${local.afd_object_id}"
 
   certificate_permissions = [
     "get"
