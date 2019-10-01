@@ -148,15 +148,16 @@ stages:
         ARM_TENANT_ID: $(azurerm-tenant-id)
         ARM_CLIENT_SECRET: $(azurerm-client-secret)
 
-    - script: az account clear
-      condition: true
-      
     - task: PublishPipelineArtifact@1
       inputs:
         targetPath: $(Build.ArtifactStagingDirectory)/tfroot
         ArtifactName: tfplan
       displayName: Publish plan
       condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+
+    - script: az account clear
+      displayName: az account clear
+      condition: true
 
 - stage: apply
   displayName: Terraform apply

@@ -12,7 +12,7 @@ resource "azurerm_key_vault" "kv" {
 resource "azurerm_key_vault_access_policy" "pipeline" {
   key_vault_id = azurerm_key_vault.kv.id
   tenant_id    = data.azurerm_client_config.current.tenant_id
-  object_id    = data.external.aadaccount.result.objectId
+  object_id    = data.azurerm_client_config.current.service_principal_object_id
 
   key_permissions = [
 

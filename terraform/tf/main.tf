@@ -37,9 +37,9 @@ data "azuread_service_principal" "afd" {
 # as opposed to service principals:
 # https://github.com/terraform-providers/terraform-provider-azurerm/issues/3234
 # Scheduled to be fixed in azurerm 1.35
-data "external" "aadaccount" {
-  program = ["az", "ad", "signed-in-user", "show", "--query", "{objectId: objectId}", "--output", "json"]
-}
+# data "external" "aadaccount" {
+#   program = ["az", "ad", "signed-in-user", "show", "--query", "{objectId: objectId}", "--output", "json"]
+# }
 
 data "azurerm_client_config" "current" {}
 
