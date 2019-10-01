@@ -12,6 +12,10 @@ resource "acme_registration" "reg" {
 
 resource "acme_certificate" "certificate" {
   count           = var.custom_domain.enabled ? 1 : 0
+  depends_on      = [
+    azurerm_dns_zone.zone[0],
+    azurerm_dns_ns_record.delegation[0]
+    ]
   account_key_pem = "${acme_registration.reg[0].account_key_pem}"
   key_type        = 4096
   common_name     = var.custom_domain.record_name == "@" ? "${var.custom_domain.zone_name}" : "${var.custom_domain.record_name}.${var.custom_domain.zone_name}"
