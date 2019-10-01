@@ -29,6 +29,7 @@ variables:
   azureSubscription: mattwhiteazuresub
   TF_IN_AUTOMATION: 1
   skipComponentGovernanceDetection: true
+  terraform-backend-key: blog.tfstate
 
 stages:
 - stage: plan
