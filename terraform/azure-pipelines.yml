@@ -26,7 +26,7 @@ variables:
   tflint-version: '0.10.3'
   tflint-sha256: 'db2ac464e1c626ab3a4ac6b5693582ddccb0bdab02ab25bb5db467d5998ca9bf'
   keyvault: tfsecrets-mawhi
-  azureSubscription: mawhiterraform
+  azureSubscription: mattwhiteazuresub
   TF_IN_AUTOMATION: 1
 
 stages:
