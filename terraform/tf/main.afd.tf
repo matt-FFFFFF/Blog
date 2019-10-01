@@ -23,7 +23,7 @@ resource "azurerm_frontdoor" "blog" {
     accepted_protocols = ["Http"]
     patterns_to_match  = ["/*"]
     redirect_configuration {
-      custom_host       = var.custom_domain.enabled ? var.custom_domain.record_name == "@" ? var.custom_domain.zone_name : "${var.custom_domain.record_name}.${var.custom_domain.zone_name}" : "${random_id.randid.hex}.azurefd.net"
+      custom_host       = var.custom_domain.enabled ? var.custom_domain.record_name == "@" ? var.custom_domain.zone_name : "${var.custom_domain.record_name}.${var.custom_domain.zone_name}" : "fd${random_id.randid.hex}.azurefd.net"
       redirect_protocol = "HttpsOnly"
       redirect_type     = "Found"
     }
@@ -72,9 +72,17 @@ resource "azurerm_frontdoor" "blog" {
     for_each = var.custom_domain.enabled ? [true] : []
     content {
       name                              = replace(var.custom_domain.zone_name, ".", "-")
-      host_name                         = var.custom_domain.record_name == "@" ? var.custom_domain.zone_name : "${var.custom_domain.record_name}.${var.custom_domain.zone_name}"
-      custom_https_provisioning_enabled = false
+      host_name                         = var.custom_domain.record_name == "@" ? "${var.custom_domain.zone_name}" : "${var.custom_domain.record_name}.${var.custom_domain.zone_name}"
+      custom_https_provisioning_enabled = true
       session_affinity_enabled          = false
+
+      custom_https_configuration {
+        certificate_source                         = "AzureKeyVault"
+        azure_key_vault_certificate_secret_name    = "${azurerm_keyvault_certificate.letsencrypt[0].name}"
+        azure_key_vault_certificate_secret_version = "${azurerm_keyvault_certificate.letsencrypt[0].version}"
+        azure_key_vault_certificate_vault_id       = "${azurerm_key_vault.kv.id}"
+      }
+
     }
   }
 

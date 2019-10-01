@@ -48,6 +48,33 @@ resource "azurerm_key_vault_access_policy" "afd" {
   ]
 }
 
+resource "azurerm_key_vault_certificate" "letsencrypt" {
+  count        = var.custom_domain.enabled ? 1 : 0
+  name         = var.custom_domain.record_name == "@" ? "${replace(var.custom_domain.zone_name, ".", "-")}" : "${var.custom_domain.record_name}-${replace(var.custom_domain.zone_name, ".", "-")}"
+  key_vault_id = "${azurerm_key_vault.kv.id}"
+
+  certificate {
+    contents = "${acme_certificate.certificate.certificate_p12}"
+  }
+
+  certificate_policy {
+    issuer_parameters {
+      name = "Self"
+    }
+
+    key_properties {
+      exportable = true
+      key_size   = 4096
+      key_type   = "RSA"
+      reuse_key  = false
+    }
+
+    secret_properties {
+      content_type = "application/x-pkcs12"
+    }
+  }
+}
+
 # # This is the HSM backed key that will wrap the asymmetric key for the Let's Encrypt state store
 # resource "azurerm_key_vault_key" "letsencrypt" {
 #   name         = "letsencrypt"

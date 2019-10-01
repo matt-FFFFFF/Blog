@@ -21,8 +21,9 @@ provider "random" {
 }
 
 provider "acme" {
-  version    = "~>1.4"
-  server_url = "https://acme-staging-v02.api.letsencrypt.org/directory"
+  version = "~>1.4"
+  #server_url = "https://acme-staging-v02.api.letsencrypt.org/directory"
+  server_url = "https://acme-v02.api.letsencrypt.org/directory"
 }
 
 provider "tls" {
