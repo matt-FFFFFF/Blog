@@ -38,6 +38,11 @@ stages:
     pool:
       vmImage: 'ubuntu-latest'
     steps:
+    - task: AzureKeyVault@1
+      inputs:
+        KeyVaultName: tfsecrets-mawhi
+        azureSubscription: $(azureSubscription)
+
     - script: |
         curl https://releases.hashicorp.com/terraform/$(terraform-version)/terraform_$(terraform-version)_linux_amd64.zip --output $(Agent.WorkFolder)/terraform.zip
       workingDirectory: $(Agent.WorkFolder)
