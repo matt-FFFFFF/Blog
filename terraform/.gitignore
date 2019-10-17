@@ -8,5 +8,8 @@
 # .tfvars files
 *.tfvars
 
+# HCL files (for backend configs)
+*.hcl
+
 # Terraform plan
 tfplan

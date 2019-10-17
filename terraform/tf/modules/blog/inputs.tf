@@ -1,28 +1,19 @@
 variable "site_name" {
-  type    = string
-  default = "dev-mattwhite-blog"
+  type = string
 }
 
 variable "resource_group_name" {
-  type    = string
-  default = "blog-dev"
+  type = string
 }
 
 # Locations of the storage accounts containg the web content
 variable "content_locations" {
   type = set(string)
-  default = [
-    "westeurope",
-    "northeurope",
-    "eastus2",
-    "westus2"
-  ]
 }
 
 # This is where we create the supporting infrastructure, e.g. the resource group & Key Vault
 variable "primary_location" {
-  type    = string
-  default = "westeurope"
+  type = string
 }
 
 variable "custom_domain" {
@@ -31,11 +22,6 @@ variable "custom_domain" {
     zone_name   = string
     record_name = string
   })
-  default = {
-    enabled     = true
-    zone_name   = "dev.mattwhite.blog"
-    record_name = "@"
-  }
 }
 
 variable "tags" {
