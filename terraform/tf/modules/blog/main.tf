@@ -18,12 +18,12 @@ data "azurerm_client_config" "current" {}
 resource "random_id" "randid" {
   byte_length = 6
   keepers = {
-    rgname = "${var.resource_group_name}"
+    rgname = var.resource_group_name
   }
 }
 
 resource "azurerm_resource_group" "rg" {
-  name     = "${random_id.randid.keepers.rgname}"
+  name     = random_id.randid.keepers.rgname
   location = var.primary_location
 
   tags = var.tags

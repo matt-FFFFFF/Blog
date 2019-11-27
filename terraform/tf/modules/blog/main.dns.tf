@@ -27,8 +27,8 @@ resource "azurerm_dns_cname_record" "afdverify" {
 resource "azurerm_dns_ns_record" "delegation" {
   count               = var.custom_domain.enabled ? 1 : 0
   name                = split(".", "${var.custom_domain.zone_name}")[0]
-  zone_name           = "${data.azurerm_dns_zone.parent.name}"
-  resource_group_name = "${data.azurerm_dns_zone.parent.resource_group_name}"
+  zone_name           = data.azurerm_dns_zone.parent.name
+  resource_group_name = data.azurerm_dns_zone.parent.resource_group_name
   ttl                 = 300
 
   records = azurerm_dns_zone.zone[0].name_servers

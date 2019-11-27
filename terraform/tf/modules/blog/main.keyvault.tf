@@ -35,9 +35,9 @@ resource "azurerm_key_vault_access_policy" "pipeline" {
 
 # This is the Azure Front Door object ID. It needs access to retrieve the certificates/secrets.
 resource "azurerm_key_vault_access_policy" "afd" {
-  key_vault_id = "${azurerm_key_vault.kv.id}"
-  tenant_id    = "${data.azurerm_client_config.current.tenant_id}"
-  object_id    = "${local.afd_object_id}"
+  key_vault_id = azurerm_key_vault.kv.id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = local.afd_object_id
 
   certificate_permissions = [
     "get"
@@ -48,18 +48,19 @@ resource "azurerm_key_vault_access_policy" "afd" {
   ]
 }
 
-resource "azurerm_key_vault_certificate" "letsencrypt" {
+resource "azurerm_key_vault_certificate" "le" {
   count        = var.custom_domain.enabled ? 1 : 0
   name         = var.custom_domain.record_name == "@" ? "${replace(var.custom_domain.zone_name, ".", "-")}" : "${var.custom_domain.record_name}-${replace(var.custom_domain.zone_name, ".", "-")}"
-  key_vault_id = "${azurerm_key_vault.kv.id}"
+  key_vault_id = azurerm_key_vault.kv.id
 
   certificate {
-    contents = "${acme_certificate.certificate[0].certificate_p12}"
+    contents = acme_certificate.certificate[0].certificate_p12
+    password = ""
   }
 
   certificate_policy {
     issuer_parameters {
-      name = "Self"
+      name = "C=US, O=Let's Encrypt, CN=Let's Encrypt Authority X3"
     }
 
     key_properties {
