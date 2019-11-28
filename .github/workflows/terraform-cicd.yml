@@ -8,7 +8,7 @@ on:
     branches: 
       - master
     paths:
-      - 'terraform/tf/**'
+      - 'terraform/**'
       - '.github/workflows/terraform-cicd.yml'
 
 env:
@@ -30,7 +30,7 @@ jobs:
         with:
           tf_actions_version: 0.12.16
           tf_actions_subcommand: 'fmt'
-          tf_actions_working_dir: terraform/tf
+          tf_actions_working_dir: terraform
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: 'Terraform Init'
@@ -38,7 +38,7 @@ jobs:
         with:
           tf_actions_version: 0.12.16
           tf_actions_subcommand: 'init'
-          tf_actions_working_dir: terraform/tf
+          tf_actions_working_dir: terraform
           args: |-
             -backend-config="storage_account_name=${{ secrets.TF_BACKEND_STORAGE_ACCOUNT_NAME }}" -backend-config="container_name=${{ secrets.TF_BACKEND_CONTAINER_NAME }}" -backend-config="key=${{ secrets.TF_BACKEND_KEY }}" -backend-config="resource_group_name=${{ secrets.TF_BACKEND_RESOURCE_GROUP_NAME }}"
         env:
@@ -48,7 +48,7 @@ jobs:
         with:
           tf_actions_version: 0.12.16
           tf_actions_subcommand: 'validate'
-          tf_actions_working_dir: terraform/tf
+          tf_actions_working_dir: terraform
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: 'Terraform Plan'
@@ -56,17 +56,17 @@ jobs:
         with:
           tf_actions_version: 0.12.16
           tf_actions_subcommand: 'plan'
-          tf_actions_working_dir: terraform/tf
+          tf_actions_working_dir: terraform
           args: |-
-            -out=plan
+            -out=tfplan
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload plan
         if: github.event_name == 'push'
         uses: actions/upload-artifact@v1
         with:
-          name: plan
-          path: terraform/tf/plan
+          name: tfplan
+          path: terraform/tfplan
   apply:
     name: 'Terraform apply'
     runs-on: ubuntu-latest
@@ -78,13 +78,14 @@ jobs:
       - name: Download plan
         uses: actions/download-artifact@v1
         with:
-          name: plan
-          path: terraform/tf
+          name: tfplan
+          path: terraform
       - name: 'Terraform Init'
         uses: hashicorp/terraform-github-actions@master
         with:
           tf_actions_version: 0.12.16
           tf_actions_subcommand: 'init'
+          tf_actions_working_dir: terraform
           args:
             -backend-config="storage_account_name=${{ secrets.TF_BACKEND_STORAGE_ACCOUNT_NAME }}" -backend-config="container_name=${{ secrets.TF_BACKEND_CONTAINER_NAME }}" -backend-config="key=${{ secrets.TF_BACKEND_KEY }}" -backend-config="resource_group_name=${{ secrets.TF_BACKEND_RESOURCE_GROUP_NAME }}"
         env:
@@ -94,8 +95,8 @@ jobs:
         with:
           tf_actions_version: 0.12.16
           tf_actions_subcommand: 'apply'
+          tf_actions_working_dir: terraform
           args: |-
-            plan
+            tfplan
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
