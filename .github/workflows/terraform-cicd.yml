@@ -73,10 +73,13 @@ jobs:
     needs: plan
     if: github.event_name == 'push'
     steps:
+      - name: 'Checkout'
+        uses: actions/checkout@master
       - name: Download plan
         uses: actions/download-artifact@v1
         with:
           name: plan
+          path: terraform/tf
       - name: 'Terraform Init'
         uses: hashicorp/terraform-github-actions@master
         with:
@@ -91,6 +94,7 @@ jobs:
         with:
           tf_actions_version: 0.12.16
           tf_actions_subcommand: 'apply'
+          tf_actions_working_dir: terraform/tf
           args: |-
             plan
         env:
