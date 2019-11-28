@@ -21,10 +21,6 @@ jobs:
     steps:
       - name: 'Checkout'
         uses: actions/checkout@master
-      - name: 'Change directory'
-        run: |
-          cd terraform/tf
-          pwd
       - name: 'Terraform Format'
         uses: hashicorp/terraform-github-actions@master
         with:
@@ -37,6 +33,7 @@ jobs:
         with:
           tf_actions_version: 0.12.16
           tf_actions_subcommand: 'init'
+          tf_actions_working_dir: terraform/tf
           args: |-
             -backend-config="storage_account_name=${{ secrets.TF_BACKEND_STORAGE_ACCOUNT_NAME }}" -backend-config="container_name=${{ secrets.TF_BACKEND_CONTAINER_NAME }}" -backend-config="key=${{ secrets.TF_BACKEND_KEY }}" -backend-config="resource_group_name=${{ secrets.TF_BACKEND_RESOURCE_GROUP_NAME }}"
         env:
