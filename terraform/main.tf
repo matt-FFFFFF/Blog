@@ -30,7 +30,7 @@ provider "tls" {
 }
 
 module "blog" {
-  source = "./modules/blog"
+  source = "./modules/terraform-azurerm-frontdoorstaticwebsite"
 
   site_name           = "dev-mattwhite-blog"
   resource_group_name = "blog-dev"
