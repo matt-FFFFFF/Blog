@@ -58,7 +58,7 @@ jobs:
           tf_actions_subcommand: 'plan'
           tf_actions_working_dir: terraform/tf
           args: |-
-            -out=tfplan
+            -out=plan
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload plan
@@ -66,7 +66,7 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: plan
-          path: terraform/tf/tfplan
+          path: terraform/tf/plan
   apply:
     name: 'Terraform apply'
     runs-on: ubuntu-latest
@@ -91,8 +91,7 @@ jobs:
         with:
           tf_actions_version: 0.12.16
           tf_actions_subcommand: 'apply'
-          tf_actions_working_dir: terraform/tf
           args: |-
-            ./tfplan
+            plan
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
