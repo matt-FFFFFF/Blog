@@ -9,7 +9,7 @@ on:
       - master
     paths:
       - 'terraform/tf/**'
-      - '.github/workflows/terraform-pr.yml'
+      - '.github/workflows/terraform-cicd.yml'
 
 env:
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
