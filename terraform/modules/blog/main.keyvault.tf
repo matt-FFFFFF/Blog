@@ -60,7 +60,7 @@ resource "azurerm_key_vault_certificate" "le" {
 
   certificate_policy {
     issuer_parameters {
-      name = "C=US, O=Let's Encrypt, CN=Let's Encrypt Authority X3"
+      name = "Unknown"
     }
 
     key_properties {
