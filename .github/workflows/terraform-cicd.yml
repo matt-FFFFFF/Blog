@@ -1,4 +1,4 @@
-name: 'Terraform PR Validation'
+name: 'Terraform CICD'
 
 on:
   pull_request:
@@ -16,7 +16,7 @@ env:
     
 jobs:
   terraform:
-    name: 'Terraform'
+    name: 'Terraform plan'
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout'
