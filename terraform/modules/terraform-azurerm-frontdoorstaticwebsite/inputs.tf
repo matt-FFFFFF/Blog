@@ -24,6 +24,20 @@ variable "custom_domain" {
   })
 }
 
+variable "parent_domain" {
+  type = object({
+    name                             = string
+    resource_group_name              = string
+    id                               = string
+    max_number_of_record_sets        = number
+    number_of_record_sets            = number
+    name_servers                     = list(string)
+    registration_virtual_network_ids = list(string)
+    resolution_virtual_network_ids   = list(string)
+    tags                             = map(string)
+  })
+}
+
 variable "tags" {
   type = map
   default = {
