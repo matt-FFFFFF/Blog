@@ -47,7 +47,7 @@ module "blog" {
     "westus2"
   ]
   primary_location = "westeurope"
-  parent_domain = data.azurerm_dns_zone.parent
+  parent_domain    = data.azurerm_dns_zone.parent
   custom_domain = {
     enabled     = true
     zone_name   = "dev.mattwhite.blog"
