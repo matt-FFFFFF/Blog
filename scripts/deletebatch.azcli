@@ -1,3 +1,0 @@
-#!/bin/bash
-
-az storage blob delete-batch --source \$web --account-name $ACCOUNT_NAME
