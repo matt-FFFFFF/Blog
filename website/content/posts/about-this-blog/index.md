@@ -1,13 +1,13 @@
 ---
 title: "About this blog"
-date: 2019-09-17T15:51:29Z
+date: 2020-07-02T22:13:29Z
 description: >-
   Why I started blogging, what I'm going to be blogging about.
 draft: false
 #tags: [""]
 #categories: [""]
 series: ["blog hosting"]
-markup: mmark
+markup: md
 #image: "images/2014/Jul/titledotscale.png"
 comments: true     # set false to hide Disqus comments
 share: true        # set false to share buttons
@@ -40,19 +40,16 @@ I thought I would do something different...
 * I wanted content to be {{< atgtblank "https://github.com/matt-FFFFFF/blog" "open source" >}}
 * I needed to do local development that would produce identical output to the deployed website
 * I wanted to automate deployments
-* I wanted to make the website highly available globally (just becasue)
 * I wanted to minimise costs
 
 ## Decisions
 
-{.table}
 | Thing | Technology | Rationale
-| ---- | ---------- | ---
+| - | - | -
 | Web content | {{< atgtblank "https://gohugo.io/" Hugo >}} | Uses {{< atgtblank "https://golang.org/" golang >}}, another interest of mine
-| Web hosting | {{< atgtblank "https://docs.microsoft.com/en-us/azure/storage/blobs/storage-blob-static-website" "Azure Storage" >}} | Inexpensive & reliable
-| Global load balancing & TLS | {{< atgtblank "https://azure.microsoft.com/en-gb/services/frontdoor/" "Azure Front Door" >}} | TLS bridging, HTTP->HTTPS redirection, custom domains
+| Web hosting | {{< atgtblank "https://azure.microsoft.com/en-us/services/app-service/static/" "Azure Static Web Apps" >}} | Inexpensive & reliable
 | Local development | {{< atgtblank "https://docs.microsoft.com/en-us/windows/wsl/wsl2-install" "WSL 2" >}}, {{< atgtblank "https://www.docker.com/" Docker >}}, {{< atgtblank "https://code.visualstudio.com/" "VS Code" >}} & {{< atgtblank "https://devblogs.microsoft.com/commandline/introducing-windows-terminal/" "Windows Terminal" >}} | Fast & efficient workflow. Containers ensure consistency.
-| CI/CD | {{< atgtblank "https://azure.microsoft.com/en-gb/services/devops/" "Azure DevOps" >}} | Desire to learn the new YAML pipelines
+| CI/CD | {{< atgtblank "https://github.com/features/actions" "GitHub Actions" >}} | Comes out the box with Azure Static Web Sites
 
 ## Next...
 
