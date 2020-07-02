@@ -5,7 +5,7 @@
         <a class="float-left" href="{{ .Permalink }}">
       {{ end }}
         {{ with .Site.Params.siteLogoImage }}
-        <img class="mr20 header-logo-image" src="{{ . | absURL }}" alt="logo">
+        <img class="mr20 header-logo-image" src="{{ . | relURL }}" alt="logo">
         {{ end }}
         {{ if .Site.Params.logoTitle }}
           {{ .Site.Params.logoTitle | safeHTML }}

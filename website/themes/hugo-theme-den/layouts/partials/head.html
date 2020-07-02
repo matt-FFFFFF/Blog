@@ -27,13 +27,13 @@
 {{ end }}
 
 {{- with .Site.Params.customFavicon -}}
-<link rel="icon" href="{{ . | absURL }}" />
+<link rel="icon" href="{{ . | relURL }}" />
 {{- end }}
-<link rel="stylesheet" href="{{ "css/bootstrap-4.3.1/bootstrap.min.css" | absURL }}">
-<link rel="stylesheet" href="{{ "css/all.css" | absURL }}">
-<link rel="stylesheet" href="{{ "css/den.css" | absURL }}">
+<link rel="stylesheet" href="{{ "css/bootstrap-4.3.1/bootstrap.min.css" | relURL }}">
+<link rel="stylesheet" href="{{ "css/all.css" | relURL }}">
+<link rel="stylesheet" href="{{ "css/den.css" | relURL }}">
 {{ range .Site.Params.customCSS }}
-<link rel="stylesheet" href="{{ "css/" | absURL }}{{ . }}">
+<link rel="stylesheet" href="{{ "css/" | relURL }}{{ . }}">
 {{ end }}
 
 {{ with .OutputFormats.Get "RSS" }}
