@@ -62,7 +62,7 @@
             {{if .Site.Copyright }}{{ .Site.Copyright | safeHTML }}{{ else }}{{ .Site.Author.name | safeHTML }}{{ end }}
             {{- end }}
             {{ if and .Site.Params.since (ne .Site.Params.since $current) }}
-              {{ .Site.Params.since }} -d
+              {{ .Site.Params.since }} -
             {{ end }}
             {{- $current }}
           </small><br/>
